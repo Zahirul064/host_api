@@ -1,20 +1,20 @@
 [
     {
       "imageUrl": "https://i.ibb.co/QcvcQcT/shaikh-jamal-uddin.png",
-      "cat_title": "Category 1",
+      "cat_title": "shaikh-jamal-uddin",
       "cat_subtitle": "Subtitle 1",
 	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
     },
     {
       "imageUrl": "https://i.ibb.co/qrWs3Cr/abdullahal-amin.png",
-      "category": "Category 2",
-      "subtitle": "Subtitle 2",
+      "cat_title": "abdullahal-amin",
+      "cat_subtitle": "Subtitle 2",
 	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
     },
     {
       "imageUrl": "https://m.media-amazon.com/images/I/51MmzRau54L._SY425_.jpg",
-      "category": "Category 3",
-      "subtitle": "Subtitle 3",
+      "cat_title": "Category 3",
+      "cat_subtitle": "Subtitle 3",
 	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
     }
   ]
