@@ -3,19 +3,19 @@
       "imageUrl": "https://i.ibb.co/QcvcQcT/shaikh-jamal-uddin.png",
       "cat_title": "Category 1",
       "cat_subtitle": "Subtitle 1",
-	    "serverUrl": ""
+	"serverUrl": ""
 	  
     },
     {
       "imageUrl": "https://i.ibb.co/qrWs3Cr/abdullahal-amin.png",
       "category": "Category 2",
       "subtitle": "Subtitle 2",
-	    "serverUrl": ""
+	"serverUrl": ""
     },
     {
       "imageUrl": "https://m.media-amazon.com/images/I/51MmzRau54L._SY425_.jpg",
       "category": "Category 3",
       "subtitle": "Subtitle 3",
-	    "serverUrl": ""
+	"serverUrl": ""
     }
   ]
