@@ -1,0 +1,34 @@
+[
+    {
+    "imageUrl": "https://i.ibb.co/pKxmS8P/mizanur-azahari.png",
+    "cat_title": "Mizanur Rahman Azhari",
+    "cat_subtitle": "Subtitle 1",
+	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
+    },
+    {
+    "imageUrl": "https://i.ibb.co/WVr4pqL/amir-hamza.png",
+    "cat_title": "Amir Hamza",
+    "cat_subtitle": "Subtitle 2",
+	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
+    },
+    {
+    "imageUrl": "https://i.ibb.co/0Qj1LHy/tarik-monwar.png",
+    "cat_title": "Tarik Monwar",
+    "cat_subtitle": "Subtitle 4",
+	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
+    },
+    {
+    "imageUrl": "https://i.ibb.co/hMzkmLF/abdullah-jahangir.png",
+    "cat_title": "Khandaker Abdullah Jahangir",
+    "cat_subtitle": "Subtitle 3",
+	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
+    },
+	
+	{
+    "imageUrl": "https://i.ibb.co/qmb17Kb/ahamadullah.png",
+    "cat_title": "Sheikh Ahmadullah",
+    "cat_subtitle": "Subtitle 3",
+	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
+    }
+	
+  ]
