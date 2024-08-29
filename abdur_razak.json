@@ -1,13 +1,13 @@
 [
     {
-      "title": "Book 1",
-      "subTitle": "Bangla",
-      "pdfUrl": "https://pdfobject.com/pdf/sample.pdf"
+      "title": "Flutter Learning Book",
+      "subTitle": "English",
+      "pdfUrl": "https://www.tutorialspoint.com/flutter/flutter_tutorial.pdf"
     },
     {
-      "title": "Book 2",
+      "title": "Flutter Learning Book",
       "subTitle": "English",
-      "pdfUrl": "https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf"
+      "pdfUrl": "https://digilib.stekom.ac.id/assets/dokumen/ebook/feb_3872ce7467cbdc7beedfcdc12b2b607b0ba36429_1649057575.pdf"
     },
     {
       "title": "Java Programming Bangla",
