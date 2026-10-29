@@ -1,126 +1,170 @@
 [
-    {
+  {
+    "key": "Mizanur_Rahman_Azhari",
     "imageUrl": "https://i.ibb.co/pKxmS8P/mizanur-azahari.png",
     "cat_title": "Mizanur Rahman Azhari",
     "cat_subtitle": "Subtitle 1",
-	"serverUrl": "https://zahirul064.github.io/host_api/mizanur_rahman_azhari.json"
-    },
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "DR_ZAKIR_NAIK",
     "imageUrl": "https://i.ibb.co.com/PZ578ykN/Dr-Zakir-Naik.png",
     "cat_title": "DR ZAKIR NAIK",
     "cat_subtitle": "Subtitle 2",
-	"serverUrl": "https://github.com/Zahirul064/host_api/blob/main/video_studio.json"
-    },
-    {
+    "serverUrl": ""
+  },
+  {
+    "key": "Amir_Hamza",
     "imageUrl": "https://i.ibb.co/WVr4pqL/amir-hamza.png",
     "cat_title": "Amir Hamza",
     "cat_subtitle": "Subtitle 3",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-    {
+    "serverUrl": ""
+  },
+  {
+    "key": "Tarik_Monwar",
     "imageUrl": "https://i.ibb.co/0Qj1LHy/tarik-monwar.png",
     "cat_title": "Tarik Monwar",
     "cat_subtitle": "Subtitle 4",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-    {
+    "serverUrl": ""
+  },
+  {
+    "key": "Khandaker_Abdullah_Jahangir",
     "imageUrl": "https://i.ibb.co/hMzkmLF/abdullah-jahangir.png",
     "cat_title": "Khandaker Abdullah Jahangir",
     "cat_subtitle": "Subtitle 5",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-	
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Sheikh_Ahmadullah",
     "imageUrl": "https://i.ibb.co/qmb17Kb/ahamadullah.png",
     "cat_title": "Sheikh Ahmadullah",
     "cat_subtitle": "Subtitle 6",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "AbdulHi_Saifullah",
     "imageUrl": "https://i.ibb.co/JQNFtF9/abdulhimdsaifullah.png",
     "cat_title": "Abdul Hi Saifullah",
     "cat_subtitle": "Subtitle 7",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Abdur_Razzak_Bin_Yousuf",
     "imageUrl": "https://i.ibb.co/TvqmhJD/abdur-razzak-bin-yousuf.png",
     "cat_title": "Abdur Razzak Bin Yousuf",
     "cat_subtitle": "Subtitle 8",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Abdullah_Bin_Abdur_Razzak",
     "imageUrl": "https://i.ibb.co/sQCTBPr/abdullah-bin-abdur-razzak.png",
     "cat_title": "Abdullah Bin Abdur Razzak",
     "cat_subtitle": "Subtitle 9",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Mahmud_bin_Quasim",
     "imageUrl": "https://i.ibb.co/GWzgvbF/mahmud-bin-qasim.png",
     "cat_title": "Mahmud bin Quasim",
     "cat_subtitle": "Subtitle 10",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "AbuToha_Adnan",
     "imageUrl": "https://i.ibb.co/mDBjqXy/abutoha-adnan.png",
     "cat_title": "Abu Toha Adnan",
     "cat_subtitle": "Subtitle 11",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Abdullah_Al_Amin",
     "imageUrl": "https://i.ibb.co/qrWs3Cr/abdullahal-amin.png",
     "cat_title": "Abdullah Al Amin",
     "cat_subtitle": "Subtitle 12",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Shaikh_Jamal_Uddin",
     "imageUrl": "https://i.ibb.co/QcvcQcT/shaikh-jamal-uddin.png",
     "cat_title": "Shaikh Jamal Uddin",
     "cat_subtitle": "Subtitle 13",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },						
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Delwar_Hossain_Sayeedi",
     "imageUrl": "https://i.ibb.co/QQTzL2j/delwar-hossain-saidi.png",
     "cat_title": "Delwar Hossain Sayeedi",
     "cat_subtitle": "Subtitle 14",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },						
-
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Kazi_Ibrahim",
     "imageUrl": "https://i.ibb.co/Sc4PR2D/kazi-ibrahim.png",
     "cat_title": "Mufti Kazi Ibrahim",
     "cat_subtitle": "Subtitle 15",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },						
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Mamunul_Haque",
     "imageUrl": "https://i.ibb.co/fdYwrKP/mamunul-haque.png",
     "cat_title": "Mamunul Haque",
     "cat_subtitle": "Subtitle 16",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },						
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Quran_EDucation",
     "imageUrl": "https://i.ibb.co/R4sQCPc/quran-education.png",
     "cat_title": "Quran Education",
     "cat_subtitle": "Subtitle 17",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },						
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Quran_Recitation",
     "imageUrl": "https://i.ibb.co.com/X8LDWh6/quran-recitation.png",
     "cat_title": "Quran Recitation",
     "cat_subtitle": "Subtitle 18",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },	
-	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Bangla_Gojol",
     "imageUrl": "https://i.ibb.co/WvTgVtW/bangla-gojol.png",
     "cat_title": "Islamic Bangla Gojol",
     "cat_subtitle": "Subtitle 19",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    },	
- 	{
+    "serverUrl": ""
+  },
+  {
+    "key": "Bangla_Poetry",
     "imageUrl": "https://i.ibb.co/9NBTPgz/bangla-poetry.png",
     "cat_title": "Islamic Bangla Poetry",
     "cat_subtitle": "Subtitle 20",
-	"serverUrl": "https://zahirul064.github.io/host_api/abdur_razak.json"
-    }
-	
-	
-  ]
+    "serverUrl": ""
+  },
+  {
+    "key": "Noman_Ali_Khan",
+    "imageUrl": "https://img.youtube.com/vi/sAAo6663YDw/hqdefault.jpg",
+    "cat_title": "Noman Ali Khan",
+    "cat_subtitle": "",
+    "serverUrl": ""
+  },
+  {
+    "key": "Popular_BD_Gojol",
+    "imageUrl": "https://img.youtube.com/vi/M9HzlVAPfls/hqdefault.jpg",
+    "cat_title": "Popular BD Gojol",
+    "cat_subtitle": "",
+    "serverUrl": ""
+  },
+  {
+    "key": "Dua_and_Zikir",
+    "imageUrl": "https://img.youtube.com/vi/BbG4dossdGI/hqdefault.jpg",
+    "cat_title": "Dua and Zikir",
+    "cat_subtitle": "",
+    "serverUrl": ""
+  },
+  {
+    "key": "names_of_Allah",
+    "imageUrl": "https://img.youtube.com/vi/vHUhs-pIqeg/hqdefault.jpg",
+    "cat_title": "99 Names of Allah",
+    "cat_subtitle": "",
+    "serverUrl": ""
+  }
+]
