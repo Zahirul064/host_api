@@ -49,7 +49,15 @@ def dart_video_counts(body):
 
 
 # ── fake YouTube ────────────────────────────────────────────────────────
-def video(vid, title, dur="PT40M", public=True, embed=True, pub="2026-10-20T10:00:00Z", live="none", ch="UCaaaaaaaaaaaaaaaaaaaaaa"):
+def video(vid, title, dur="PT40M", public=True, embed=True, pub="2026-10-20T10:00:00Z", live="none",
+          ch="UCaaaaaaaaaaaaaaaaaaaaaa", views=None):
+    v = _video(vid, title, dur, public, embed, pub, live, ch)
+    if views is not None:
+        v["statistics"] = {"viewCount": str(views)}
+    return v
+
+
+def _video(vid, title, dur, public, embed, pub, live, ch):
     return {"id": vid,
             "snippet": {"title": title, "publishedAt": pub, "channelTitle": "চ্যানেল", "channelId": ch,
                         "liveBroadcastContent": live},
@@ -347,6 +355,37 @@ class PipelineTests(Base):
         self.run_main(fake)
         ids = [i["video_id"] for i in self.items()]
         self.assertEqual([i for i in ids if i[:4] in ("POLI", "LIVE", "OKAY")], ["OKAYvid0001"])
+
+    def test_most_viewed_first(self):
+        """sort_by=viewCount: ১৮০ দিনের মধ্যে সবচেয়ে বেশি দেখা ৫টি, ভিউ অনুযায়ী ক্রমে।"""
+        self._conf(sort_by="viewCount", lookback_days=180)
+        views = [500, 90000, 1200, 45000, 7, 300000, 64000]
+        ids = [f"VIEWvid{n:04d}" for n in range(len(views))]
+        fake = FakeYouTube({"আমির হামজা ওয়াজ": ids},
+                           [video(i, f"আমির হামজা ওয়াজ {n}", views=views[n],
+                                  ch=f"UC{n:022d}") for n, i in enumerate(ids)])
+        self.run_main(fake)
+        added = [i["video_id"] for i in self.items() if i["video_id"].startswith("VIEW")]
+        self.assertEqual(added, ["VIEWvid0005", "VIEWvid0001", "VIEWvid0006", "VIEWvid0003", "VIEWvid0002"])
+        self.assertEqual(json.loads(self.meta.read_text(encoding="utf-8"))["VIEWvid0005"]["view_count"], 300000)
+        self.assertIn(("search", "আমির হামজা ওয়াজ"), fake.calls)
+
+    def test_search_uses_view_count_order(self):
+        self._conf(sort_by="viewCount")
+        seen = {}
+
+        def spy(endpoint, params, key, quota, **kw):
+            quota.spend(endpoint)
+            if endpoint == "search":
+                seen["order"] = params["order"]
+            return {"items": []}
+        self.run_main(spy)
+        self.assertEqual(seen["order"], "viewCount")
+
+    def test_missing_or_hidden_view_count_is_zero(self):
+        self.assertEqual(uv._view_count({"statistics": {}}), 0)
+        self.assertEqual(uv._view_count({"statistics": {"viewCount": "abc"}}), 0)
+        self.assertEqual(uv._view_count({}), 0)
 
     def test_title_key(self):
         self.assertEqual(uv.title_key("ওয়াজ ২০২৬ (Portrait)"), uv.title_key("ওয়াজ  ২০২৬"))

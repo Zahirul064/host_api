@@ -259,7 +259,7 @@ class Report:
 def fetch_details(ids, key, quota) -> dict:
     out = {}
     for part in chunks(list(ids), 50):
-        data = api_get("videos", {"part": "snippet,contentDetails,status",
+        data = api_get("videos", {"part": "snippet,contentDetails,status,statistics",
                                   "id": ",".join(part), "maxResults": 50}, key, quota)
         for v in data.get("items") or []:
             if isinstance(v, dict) and isinstance(v.get("id"), str):
@@ -294,7 +294,8 @@ def discover(sch: dict, cfg: dict, key: str, quota: QuotaGuard, since: str, rep:
     for q in sch.get("queries", []):
         try:
             data = api_get("search", {
-                "part": "id", "type": "video", "q": q, "order": "date",
+                "part": "id", "type": "video", "q": q,
+                "order": "viewCount" if cfg.get("sort_by") == "viewCount" else "date",
                 "publishedAfter": since, "maxResults": cfg["search_max_results"],
                 "regionCode": cfg["region_code"], "relevanceLanguage": cfg["relevance_language"],
                 "videoEmbeddable": "true", "safeSearch": "strict",
@@ -314,6 +315,14 @@ def discover(sch: dict, cfg: dict, key: str, quota: QuotaGuard, since: str, rep:
         else:
             rep.skip("invalid id")
     return good
+
+
+def _view_count(v: dict) -> int:
+    """videos.list → statistics.viewCount (স্ট্রিং আসে; না থাকলে/লুকানো থাকলে 0)।"""
+    try:
+        return int((v.get("statistics") or {}).get("viewCount") or 0)
+    except (TypeError, ValueError):
+        return 0
 
 
 def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_ch, rep: Report,
@@ -346,7 +355,7 @@ def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_c
     return ({"itemType": k, "title": title, "video_id": v["id"]},
             {"published_at": pub, "channel": clean_title(sn.get("channelTitle", ""))[:120],
              "channel_id": sn.get("channelId", ""), "url": f"https://www.youtube.com/watch?v={v['id']}",
-             "source": "auto"})
+             "source": "auto", "view_count": _view_count(v)})
 
 
 # ── merge + atomic write ─────────────────────────────────────────────────
@@ -490,7 +499,11 @@ def run(args) -> int:
             built = build_record(k, v, sch, cfg, blocked_words, blocked_ch, rep, blocked_subs, blocked_cs)
             if built:
                 recs.append(built)
-        recs.sort(key=lambda r: r[1]["published_at"], reverse=True)
+        # sort_by = "viewCount": সবচেয়ে বেশি দেখা আগে; নইলে নতুনতম আগে
+        if cfg.get("sort_by") == "viewCount":
+            recs.sort(key=lambda r: (r[1].get("view_count", 0), r[1]["published_at"]), reverse=True)
+        else:
+            recs.sort(key=lambda r: r[1]["published_at"], reverse=True)
         chosen = []
         for r, m in recs:
             tk = title_key(r["title"])

@@ -3,14 +3,14 @@ name: Update waz videos
 on:
   schedule:
     # প্রতিদিন একবার (UTC 00:17 = বাংলাদেশ সকাল ৬:১৭)। GitHub কখনো দেরিতে চালায়;
-    # স্ক্রিপ্ট ১৪ দিনের উইন্ডো দেখে ও ডুপ্লিকেট আটকায়, তাই নির্দিষ্ট মিনিটের ওপর নির্ভর করে না।
+    # স্ক্রিপ্ট ১৮০ দিনের উইন্ডো দেখে ও ডুপ্লিকেট আটকায়, তাই নির্দিষ্ট মিনিটের ওপর নির্ভর করে না।
     - cron: "17 0 * * *"
   workflow_dispatch:
     inputs:
       lookback_days:
-        description: "কত দিন পেছনের ভিডিও খুঁজবে (প্রথমবার 180)"
+        description: "কত দিন পেছনের ভিডিও খুঁজবে (সবচেয়ে বেশি দেখাগুলো থেকে)"
         required: false
-        default: "14"
+        default: "180"
       max_new:
         description: "প্রতি ক্যাটাগরিতে সর্বোচ্চ নতুন ভিডিও"
         required: false
@@ -49,7 +49,7 @@ jobs:
         id: fetch
         env:
           YT_API_KEY: ${{ secrets.YT_API_KEY }}
-          LOOKBACK: ${{ github.event.inputs.lookback_days || '14' }}
+          LOOKBACK: ${{ github.event.inputs.lookback_days || '180' }}
           MAX_NEW: ${{ github.event.inputs.max_new || '5' }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           PRUNE: ${{ github.event.inputs.prune || 'false' }}
