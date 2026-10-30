@@ -149,9 +149,30 @@ def title_matches(title: str, must: list[str]) -> bool:
     return not must or any(norm(w) in t for w in must)
 
 
-def title_blocked(title: str, blocked: list[str]) -> bool:
+def title_blocked(title: str, blocked: list[str], substrings: list[str] = (),
+                  case_sensitive: list[str] = ()) -> bool:
+    """blocked: পুরো শব্দ মিললে (ইংরেজি)। substrings: শব্দের অংশ হলেও (বাংলা
+    বিভক্তির জন্য, যেমন "জোট" → "জোটের")। case_sensitive: হুবহু বড়-ছোট হাতের
+    অক্ষরে (যেমন "LIVE" — যাতে "how to live" বাদ না পড়ে)।"""
     t = f" {norm(title)} "
-    return any(f" {norm(w)} " in t or (norm(w).startswith("#") and norm(w) in t) for w in blocked)
+    if any(f" {norm(w)} " in t or (norm(w).startswith("#") and norm(w) in t) for w in blocked):
+        return True
+    if any(norm(w) and norm(w) in t for w in substrings):
+        return True
+    raw = nfc(title)
+    return any(re.search(r"(?<![A-Za-z])" + re.escape(w) + r"(?![A-Za-z])", raw) for w in case_sensitive)
+
+
+def title_key(title: str) -> str:
+    """একই ভিডিওর কপি চেনার জন্য শিরোনামের সারাংশ: ছোট হাতের অক্ষর, ব্র্যাকেটের
+    অংশ (যেমন "(Portrait)") বাদ, যতিচিহ্ন/ইমোজি বাদ। সংখ্যা রাখা হয় (পর্ব ১ ≠ পর্ব ২,
+    "(২)" ≠ "")।"""
+    t = norm(title)
+    # ব্র্যাকেটে শুধু লেবেল (Portrait/Full/HD) থাকলে বাদ; সংখ্যা থাকলে (পর্ব "(২)") রাখা
+    t = re.sub(r"\(([^)]*)\)|\[([^\]]*)\]",
+               lambda m: f" {m.group(0)} " if re.search(r"\d", m.group(0)) else " ", t)
+    t = "".join(ch if (ch.isalnum() or unicodedata.category(ch) in ("Mn", "Mc")) else " " for ch in t)
+    return re.sub(r"\s+", " ", t).strip()
 
 
 def iso_duration_seconds(s: str) -> int:
@@ -295,7 +316,8 @@ def discover(sch: dict, cfg: dict, key: str, quota: QuotaGuard, since: str, rep:
     return good
 
 
-def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_ch, rep: Report):
+def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_ch, rep: Report,
+                 blocked_subs=(), blocked_cs=()):
     if not is_playable(v):
         rep.skip("not public/embeddable/live")
         return None
@@ -307,7 +329,7 @@ def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_c
     if sn.get("channelId") in blocked_ch:
         rep.skip("blocked channel")
         return None
-    if title_blocked(title, blocked_words):
+    if title_blocked(title, blocked_words, blocked_subs, blocked_cs):
         rep.skip("blocked word")
         return None
     if not title_matches(title, sch.get("must_match", [])):
@@ -388,7 +410,10 @@ def run(args) -> int:
     if args.max_new:
         cfg["max_new_per_category"] = args.max_new
     blocked_words = conf.get("blocked_title_words", [])
+    blocked_subs = conf.get("blocked_title_substrings", [])
+    blocked_cs = conf.get("blocked_title_words_case_sensitive", [])
     blocked_ch = set(conf.get("blocked_channel_ids", []))
+    per_channel = int(cfg.get("max_per_channel_per_run", 0) or 0)   # 0 = সীমা নেই
 
     data_path, meta_path = Path(args.data), Path(args.meta)
     # ১-২. লোড ও বর্তমান কাঠামো যাচাই
@@ -419,6 +444,8 @@ def run(args) -> int:
             dups.append(vid)
         seen.add(vid)
     rep.existing_duplicates = sorted(set(dups))
+    seen_titles = {title_key(it["title"]) for it in items}
+    channel_count: dict[str, int] = {}
 
     key = os.environ.get("YT_API_KEY", "").strip()
     if not key:
@@ -460,13 +487,27 @@ def run(args) -> int:
             if v is None:
                 rep.skip("no details returned")
                 continue
-            built = build_record(k, v, sch, cfg, blocked_words, blocked_ch, rep)
+            built = build_record(k, v, sch, cfg, blocked_words, blocked_ch, rep, blocked_subs, blocked_cs)
             if built:
                 recs.append(built)
         recs.sort(key=lambda r: r[1]["published_at"], reverse=True)
-        if len(recs) > limit:
-            rep.skipped["over per-run limit"] = rep.skipped.get("over per-run limit", 0) + len(recs) - limit
-            recs = recs[:limit]
+        chosen = []
+        for r, m in recs:
+            tk = title_key(r["title"])
+            ch = m.get("channel_id") or m.get("channel", "")
+            if tk in seen_titles:
+                rep.skip("same title already present")
+                continue
+            if per_channel and channel_count.get(ch, 0) >= per_channel:
+                rep.skip("channel limit per run")
+                continue
+            if len(chosen) >= limit:
+                rep.skip("over per-run limit")
+                continue
+            chosen.append((r, m))
+            seen_titles.add(tk)
+            channel_count[ch] = channel_count.get(ch, 0) + 1
+        recs = chosen
         if recs:
             new_by_key[k] = [r for r, _ in recs]
             rep.added[k] = new_by_key[k]

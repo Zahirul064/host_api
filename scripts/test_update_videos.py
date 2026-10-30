@@ -296,6 +296,64 @@ class PipelineTests(Base):
         self.run_main(fake, "--prune")
         self.assertNotIn("rLKhbUCH2-A", [i["video_id"] for i in self.items()])
 
+    def _conf(self, **defaults_extra):
+        c = json.loads(json.dumps(CONFIG))
+        c["defaults"].update(defaults_extra)
+        c["blocked_title_substrings"] = ["নির্বাচন", "লংমার্চ", "জোট", "🔴", "লাইভ"]
+        c["blocked_title_words_case_sensitive"] = ["LIVE"]
+        self.conf.write_text(json.dumps(c, ensure_ascii=False), encoding="utf-8")
+
+    def test_same_title_taken_once(self):
+        self._conf()
+        fake = FakeYouTube({"আমির হামজা ওয়াজ": ["DUPtitle001", "DUPtitle002", "DUPtitle003"]}, [
+            video("DUPtitle001", "আমির হামজা নতুন ওয়াজ ২০২৬", pub="2026-10-29T00:00:00Z"),
+            video("DUPtitle002", "আমির হামজা নতুন ওয়াজ ২০২৬ (Portrait)", pub="2026-10-28T00:00:00Z"),
+            video("DUPtitle003", "আমির  হামজা — নতুন ওয়াজ ২০২৬!!", pub="2026-10-27T00:00:00Z"),
+        ])
+        self.run_main(fake)
+        ids = [i["video_id"] for i in self.items()]
+        self.assertIn("DUPtitle001", ids)
+        self.assertNotIn("DUPtitle002", ids)
+        self.assertNotIn("DUPtitle003", ids)
+
+    def test_title_already_in_file_is_skipped(self):
+        self._conf()
+        fake = FakeYouTube({"তারেক মনোয়ার": ["REUPLOAD001"]},
+                           [video("REUPLOAD001", "পুরনো ৩ তারেক মনোয়ার")])
+        self.data.write_text(json.dumps({"itemType": EXISTING + [
+            {"itemType": "Tarik_Monwar", "title": "পুরনো ৩ তারেক মনোয়ার", "video_id": "EXISTvid001"}]},
+            ensure_ascii=False), encoding="utf-8")
+        self.run_main(fake)
+        self.assertNotIn("REUPLOAD001", [i["video_id"] for i in self.items()])
+
+    def test_max_two_per_channel_per_run(self):
+        self._conf(max_per_channel_per_run=2)
+        ids = [f"CHANvid{n:04d}" for n in range(4)]
+        vids = [video(i, f"আমির হামজা ওয়াজ পর্ব {n}", pub=f"2026-10-2{n}T00:00:00Z") for n, i in enumerate(ids)]
+        vids += [video("TARIKvid001", "তারেক মনোয়ার ওয়াজ")]   # একই চ্যানেল (ডিফল্ট), অন্য বক্তা
+        self.run_main(FakeYouTube({"আমির হামজা ওয়াজ": ids, "তারেক মনোয়ার": ["TARIKvid001"]}, vids))
+        added = [i["video_id"] for i in self.items() if i["video_id"].startswith(("CHAN", "TARIK"))]
+        self.assertEqual(added, ["CHANvid0003", "CHANvid0002"])   # চ্যানেলের দিনের কোটা শেষ
+
+    def test_live_and_political_titles_blocked(self):
+        self._conf()
+        fake = FakeYouTube({"তারেক মনোয়ার": ["POLIvid0001", "POLIvid0002", "LIVEvid0001", "LIVEvid0002", "OKAYvid0001"]}, [
+            video("POLIvid0001", "১১ দলীয় জোটের লংমার্চ নিয়ে তারেক মনোয়ার"),
+            video("POLIvid0002", "উপনির্বাচন নিয়ে যা বললেন তারেক মনোয়ার"),
+            video("LIVEvid0001", "🔴 LIVE তারেক মনোয়ার মাহফিল"),
+            video("LIVEvid0002", "তারেক মনোয়ার লাইভ ওয়াজ"),
+            video("OKAYvid0001", "How to Live a Good Life | তারেক মনোয়ার"),
+        ])
+        self.run_main(fake)
+        ids = [i["video_id"] for i in self.items()]
+        self.assertEqual([i for i in ids if i[:4] in ("POLI", "LIVE", "OKAY")], ["OKAYvid0001"])
+
+    def test_title_key(self):
+        self.assertEqual(uv.title_key("ওয়াজ ২০২৬ (Portrait)"), uv.title_key("ওয়াজ  ২০২৬"))
+        self.assertNotEqual(uv.title_key("পর্ব ১"), uv.title_key("পর্ব ২"))
+        self.assertNotEqual(uv.title_key("সোলাইমান (আঃ) এর দোয়া (২) -- Nouman Ali Khan"),
+                            uv.title_key("সোলাইমান (আঃ) এর দোয়া -- Nouman Ali Khan"))
+
     def test_config_validation(self):
         bad = json.loads(json.dumps(CONFIG))
         bad["scholars"].append({"key": "Amir_Hamza", "auto": False})
