@@ -10,10 +10,17 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
     #player { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    #unmute {
+      display: none; position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%);
+      padding: 10px 18px; border: 0; border-radius: 24px; font-size: 15px;
+      background: rgba(0,0,0,.75); color: #fff; cursor: pointer; z-index: 10;
+      font-family: system-ui, -apple-system, "Noto Sans Bengali", sans-serif;
+    }
   </style>
 </head>
 <body>
   <div id="player"></div>
+  <button id="unmute" type="button">🔊 শব্দ চালু করুন</button>
   <script>
     // Waj-Mahafil অ্যাপের অফিসিয়াল YouTube IFrame প্লেয়ার পেজ।
     // ব্যবহার: player.html?v=<11 অক্ষরের ভিডিও আইডি>
@@ -50,8 +57,30 @@
           widget_referrer: location.href
         },
         events: {
-          onReady: function (e) { e.target.playVideo(); },
-          onStateChange: function (e) { if (e.data === 0) send('ended'); },
+          onReady: function (e) {
+            var p = e.target;
+            p.playVideo();
+            // কিছু WebView (iOS/macOS) শব্দসহ autoplay আটকায়। ১.৫ সেকেন্ডে চালু না হলে
+            // নিঃশব্দে চালু করি (সব browser এটা অনুমোদন করে) আর "শব্দ চালু করুন" বাটন দেখাই।
+            setTimeout(function () {
+              var st = p.getPlayerState ? p.getPlayerState() : -1;
+              if (st !== 1 && st !== 3) {           // PLAYING বা BUFFERING নয়
+                p.mute();
+                p.playVideo();
+                var btn = document.getElementById('unmute');
+                btn.style.display = 'block';
+                btn.onclick = function () { p.unMute(); p.setVolume(100); btn.style.display = 'none'; };
+                // ব্যবহারকারী YouTube-এর নিজস্ব 🔇 বাটনে শব্দ চালু করলেও আমাদের বাটন সরে যাবে
+                var t = setInterval(function () {
+                  if (p.isMuted && !p.isMuted()) { btn.style.display = 'none'; clearInterval(t); }
+                }, 1000);
+                send('muted-autoplay');
+              }
+            }, 1500);
+          },
+          onStateChange: function (e) {
+            if (e.data === 0) send('ended');
+          },
           onError: function (e) { send('error:' + e.data); }
         }
       });
