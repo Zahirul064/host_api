@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- YouTube এমবেডের জন্য referrer পাঠানো বাধ্যতামূলক (না হলে Error 152/153) -->
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Waj-Mahafil Player</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+    #player { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="player"></div>
+  <script>
+    // Waj-Mahafil অ্যাপের অফিসিয়াল YouTube IFrame প্লেয়ার পেজ।
+    // ব্যবহার: player.html?v=<11 অক্ষরের ভিডিও আইডি>
+    // অ্যাপ WebView-এ "YTBridge" JavaScript channel দেয়: 'ended' / 'error:<code>'
+    function send(msg) {
+      try {
+        if (window.YTBridge && window.YTBridge.postMessage) window.YTBridge.postMessage(msg);
+      } catch (e) {}
+    }
+
+    var params = new URLSearchParams(location.search);
+    var videoId = params.get('v') || '';
+    if (!/^[A-Za-z0-9_-]{11}$/.test(videoId)) {
+      send('error:2');   // YouTube-এর "invalid parameter" কোডের মতোই
+    } else {
+      var tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      tag.onerror = function () { send('error:-2'); };
+      document.head.appendChild(tag);
+    }
+
+    window.onYouTubeIframeAPIReady = function () {
+      new YT.Player('player', {
+        videoId: videoId,
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          autoplay: 1,
+          playsinline: 1,
+          rel: 0,
+          controls: 1,
+          fs: 1,
+          origin: location.origin,
+          widget_referrer: location.href
+        },
+        events: {
+          onReady: function (e) { e.target.playVideo(); },
+          onStateChange: function (e) { if (e.data === 0) send('ended'); },
+          onError: function (e) { send('error:' + e.data); }
+        }
+      });
+    };
+  </script>
+</body>
+</html>
