@@ -1,0 +1,1571 @@
+[
+ {
+  "n": 1,
+  "bn": "আল-ফাতিহা",
+  "en": "Al-Fatiha",
+  "en_match": [
+   "faatiha",
+   "fatiah",
+   "fatiha",
+   "fatihah"
+  ],
+  "ar": "فاتحة",
+  "bn_match": [
+   "ফাতিহা",
+   "ফাতেহা"
+  ]
+ },
+ {
+  "n": 2,
+  "bn": "আল-বাকারা",
+  "en": "Al-Baqarah",
+  "en_match": [
+   "bakara",
+   "bakarah",
+   "baqara",
+   "baqarah"
+  ],
+  "ar": "بقرة",
+  "bn_match": [
+   "বাকারা",
+   "বাকারাহ",
+   "বাক্বারাহ"
+  ]
+ },
+ {
+  "n": 3,
+  "bn": "আলে ইমরান",
+  "en": "Aal-e-Imran",
+  "en_match": [
+   "imraan",
+   "imran"
+  ],
+  "ar": "عمران",
+  "bn_match": [
+   "ইমরান"
+  ]
+ },
+ {
+  "n": 4,
+  "bn": "আন-নিসা",
+  "en": "An-Nisa",
+  "en_match": [
+   "nisa",
+   "nisaa"
+  ],
+  "ar": "نساء",
+  "bn_match": [
+   "নিসা"
+  ]
+ },
+ {
+  "n": 5,
+  "bn": "আল-মায়িদা",
+  "en": "Al-Maidah",
+  "en_match": [
+   "maaidah",
+   "maida",
+   "maidah",
+   "maidha"
+  ],
+  "ar": "مائدة",
+  "bn_match": [
+   "মায়িদা",
+   "মায়েদা",
+   "মাইদা"
+  ]
+ },
+ {
+  "n": 6,
+  "bn": "আল-আনআম",
+  "en": "Al-Anam",
+  "en_match": [
+   "anaam",
+   "anam"
+  ],
+  "ar": "أنعام",
+  "bn_match": [
+   "আনআম",
+   "আনয়াম",
+   "আনাম"
+  ]
+ },
+ {
+  "n": 7,
+  "bn": "আল-আরাফ",
+  "en": "Al-Araf",
+  "en_match": [
+   "aaraf",
+   "araf"
+  ],
+  "ar": "أعراف",
+  "bn_match": [
+   "আরাফ",
+   "আ'রাফ"
+  ]
+ },
+ {
+  "n": 8,
+  "bn": "আল-আনফাল",
+  "en": "Al-Anfal",
+  "en_match": [
+   "anfal"
+  ],
+  "ar": "أنفال",
+  "bn_match": [
+   "আনফাল"
+  ]
+ },
+ {
+  "n": 9,
+  "bn": "আত-তাওবা",
+  "en": "At-Tawbah",
+  "en_match": [
+   "tauba",
+   "taubah",
+   "tawba",
+   "tawbah"
+  ],
+  "ar": "توبة",
+  "bn_match": [
+   "তাওবা",
+   "তওবা"
+  ]
+ },
+ {
+  "n": 10,
+  "bn": "ইউনুস",
+  "en": "Yunus",
+  "en_match": [
+   "younus",
+   "yunas",
+   "yunus"
+  ],
+  "ar": "يونس",
+  "bn_match": [
+   "ইউনুস"
+  ]
+ },
+ {
+  "n": 11,
+  "bn": "হুদ",
+  "en": "Hud",
+  "en_match": [
+   "hood",
+   "hud"
+  ],
+  "ar": "هود",
+  "bn_match": [
+   "হুদ",
+   "হূদ"
+  ]
+ },
+ {
+  "n": 12,
+  "bn": "ইউসুফ",
+  "en": "Yusuf",
+  "en_match": [
+   "yousuf",
+   "yusef",
+   "yusuf"
+  ],
+  "ar": "يوسف",
+  "bn_match": [
+   "ইউসুফ"
+  ]
+ },
+ {
+  "n": 13,
+  "bn": "আর-রাদ",
+  "en": "Ar-Rad",
+  "en_match": [
+   "raad",
+   "rad"
+  ],
+  "ar": "رعد",
+  "bn_match": [
+   "রাদ",
+   "রা'দ"
+  ]
+ },
+ {
+  "n": 14,
+  "bn": "ইবরাহীম",
+  "en": "Ibrahim",
+  "en_match": [
+   "ibraheem",
+   "ibrahim"
+  ],
+  "ar": "إبراهيم",
+  "bn_match": [
+   "ইবরাহীম",
+   "ইব্রাহীম",
+   "ইব্রাহিম",
+   "ইবরাহিম"
+  ]
+ },
+ {
+  "n": 15,
+  "bn": "আল-হিজর",
+  "en": "Al-Hijr",
+  "en_match": [
+   "hijr"
+  ],
+  "ar": "حجر",
+  "bn_match": [
+   "হিজর"
+  ]
+ },
+ {
+  "n": 16,
+  "bn": "আন-নাহল",
+  "en": "An-Nahl",
+  "en_match": [
+   "nahl"
+  ],
+  "ar": "نحل",
+  "bn_match": [
+   "নাহল"
+  ]
+ },
+ {
+  "n": 17,
+  "bn": "বনী ইসরাঈল",
+  "en": "Al-Isra",
+  "en_match": [
+   "baniisraeel",
+   "baniisrail",
+   "isra",
+   "israa"
+  ],
+  "ar": "إسراء",
+  "bn_match": [
+   "ইসরা",
+   "বনী ইসরাঈল",
+   "বনি ইসরাইল"
+  ]
+ },
+ {
+  "n": 18,
+  "bn": "আল-কাহফ",
+  "en": "Al-Kahf",
+  "en_match": [
+   "kahaf",
+   "kahf"
+  ],
+  "ar": "كهف",
+  "bn_match": [
+   "কাহফ",
+   "কাহাফ"
+  ]
+ },
+ {
+  "n": 19,
+  "bn": "মারইয়াম",
+  "en": "Maryam",
+  "en_match": [
+   "mariam",
+   "maryam"
+  ],
+  "ar": "مريم",
+  "bn_match": [
+   "মারইয়াম",
+   "মরিয়ম",
+   "মারিয়াম"
+  ]
+ },
+ {
+  "n": 20,
+  "bn": "ত্বা-হা",
+  "en": "Taha",
+  "en_match": [
+   "taha",
+   "toha"
+  ],
+  "ar": "طه",
+  "bn_match": [
+   "ত্বাহা",
+   "ত্বা-হা",
+   "তাহা",
+   "ত্বোয়াহা"
+  ]
+ },
+ {
+  "n": 21,
+  "bn": "আল-আম্বিয়া",
+  "en": "Al-Anbiya",
+  "en_match": [
+   "anbiya",
+   "anbiyaa"
+  ],
+  "ar": "أنبياء",
+  "bn_match": [
+   "আম্বিয়া"
+  ]
+ },
+ {
+  "n": 22,
+  "bn": "আল-হজ্জ",
+  "en": "Al-Hajj",
+  "en_match": [
+   "hajj"
+  ],
+  "ar": "حج",
+  "bn_match": [
+   "হজ্জ",
+   "হাজ্জ"
+  ]
+ },
+ {
+  "n": 23,
+  "bn": "আল-মুমিনুন",
+  "en": "Al-Muminun",
+  "en_match": [
+   "mominun",
+   "muminoon",
+   "muminun"
+  ],
+  "ar": "مؤمنون",
+  "bn_match": [
+   "মুমিনুন",
+   "মুমিনূন"
+  ]
+ },
+ {
+  "n": 24,
+  "bn": "আন-নূর",
+  "en": "An-Nur",
+  "en_match": [
+   "noor",
+   "nur"
+  ],
+  "ar": "نور",
+  "bn_match": [
+   "নূর",
+   "নুর"
+  ]
+ },
+ {
+  "n": 25,
+  "bn": "আল-ফুরকান",
+  "en": "Al-Furqan",
+  "en_match": [
+   "furqaan",
+   "furqan"
+  ],
+  "ar": "فرقان",
+  "bn_match": [
+   "ফুরকান"
+  ]
+ },
+ {
+  "n": 26,
+  "bn": "আশ-শুআরা",
+  "en": "Ash-Shuara",
+  "en_match": [
+   "shuara",
+   "shuaraa"
+  ],
+  "ar": "شعراء",
+  "bn_match": [
+   "শুআরা",
+   "শুয়ারা"
+  ]
+ },
+ {
+  "n": 27,
+  "bn": "আন-নামল",
+  "en": "An-Naml",
+  "en_match": [
+   "naml"
+  ],
+  "ar": "نمل",
+  "bn_match": [
+   "নামল"
+  ]
+ },
+ {
+  "n": 28,
+  "bn": "আল-কাসাস",
+  "en": "Al-Qasas",
+  "en_match": [
+   "qasas"
+  ],
+  "ar": "قصص",
+  "bn_match": [
+   "কাসাস",
+   "ক্বাসাস"
+  ]
+ },
+ {
+  "n": 29,
+  "bn": "আল-আনকাবুত",
+  "en": "Al-Ankabut",
+  "en_match": [
+   "ankaboot",
+   "ankabut"
+  ],
+  "ar": "عنكبوت",
+  "bn_match": [
+   "আনকাবুত",
+   "আনকাবূত"
+  ]
+ },
+ {
+  "n": 30,
+  "bn": "আর-রূম",
+  "en": "Ar-Rum",
+  "en_match": [
+   "room",
+   "rum"
+  ],
+  "ar": "روم",
+  "bn_match": [
+   "রূম",
+   "রুম"
+  ]
+ },
+ {
+  "n": 31,
+  "bn": "লুকমান",
+  "en": "Luqman",
+  "en_match": [
+   "lukman",
+   "luqman"
+  ],
+  "ar": "لقمان",
+  "bn_match": [
+   "লুকমান",
+   "লোকমান"
+  ]
+ },
+ {
+  "n": 32,
+  "bn": "আস-সাজদা",
+  "en": "As-Sajdah",
+  "en_match": [
+   "sajda",
+   "sajdah"
+  ],
+  "ar": "سجدة",
+  "bn_match": [
+   "সাজদা",
+   "সেজদা"
+  ]
+ },
+ {
+  "n": 33,
+  "bn": "আল-আহযাব",
+  "en": "Al-Ahzab",
+  "en_match": [
+   "ahzab"
+  ],
+  "ar": "أحزاب",
+  "bn_match": [
+   "আহযাব",
+   "আহজাব"
+  ]
+ },
+ {
+  "n": 34,
+  "bn": "সাবা",
+  "en": "Saba",
+  "en_match": [
+   "saba"
+  ],
+  "ar": "سبأ",
+  "bn_match": [
+   "সাবা"
+  ]
+ },
+ {
+  "n": 35,
+  "bn": "ফাতির",
+  "en": "Fatir",
+  "en_match": [
+   "fatir"
+  ],
+  "ar": "فاطر",
+  "bn_match": [
+   "ফাতির"
+  ]
+ },
+ {
+  "n": 36,
+  "bn": "ইয়াসীন",
+  "en": "Yasin",
+  "en_match": [
+   "yaseen",
+   "yasiin",
+   "yasin"
+  ],
+  "ar": "يس",
+  "bn_match": [
+   "ইয়াসীন",
+   "ইয়াসিন",
+   "ইয়া-সীন"
+  ]
+ },
+ {
+  "n": 37,
+  "bn": "আস-সাফফাত",
+  "en": "As-Saffat",
+  "en_match": [
+   "saaffat",
+   "saffat"
+  ],
+  "ar": "صافات",
+  "bn_match": [
+   "সাফফাত",
+   "ছাফফাত"
+  ]
+ },
+ {
+  "n": 38,
+  "bn": "সোয়াদ",
+  "en": "Sad",
+  "en_match": [
+   "saad",
+   "sad"
+  ],
+  "ar": "ص",
+  "bn_match": [
+   "সোয়াদ",
+   "ছোয়াদ",
+   "সাদ"
+  ]
+ },
+ {
+  "n": 39,
+  "bn": "আয-যুমার",
+  "en": "Az-Zumar",
+  "en_match": [
+   "zumar"
+  ],
+  "ar": "زمر",
+  "bn_match": [
+   "যুমার",
+   "জুমার"
+  ]
+ },
+ {
+  "n": 40,
+  "bn": "গাফির",
+  "en": "Ghafir",
+  "en_match": [
+   "ghafir"
+  ],
+  "ar": "غافر",
+  "bn_match": [
+   "গাফির",
+   "মুমিন"
+  ]
+ },
+ {
+  "n": 41,
+  "bn": "ফুসসিলাত",
+  "en": "Fussilat",
+  "en_match": [
+   "fussilat"
+  ],
+  "ar": "فصلت",
+  "bn_match": [
+   "ফুসসিলাত",
+   "হা-মীম সাজদা"
+  ]
+ },
+ {
+  "n": 42,
+  "bn": "আশ-শূরা",
+  "en": "Ash-Shura",
+  "en_match": [
+   "shura",
+   "shuraa"
+  ],
+  "ar": "شورى",
+  "bn_match": [
+   "শূরা",
+   "শুরা"
+  ]
+ },
+ {
+  "n": 43,
+  "bn": "আয-যুখরুফ",
+  "en": "Az-Zukhruf",
+  "en_match": [
+   "zukhruf"
+  ],
+  "ar": "زخرف",
+  "bn_match": [
+   "যুখরুফ",
+   "জুখরুফ"
+  ]
+ },
+ {
+  "n": 44,
+  "bn": "আদ-দুখান",
+  "en": "Ad-Dukhan",
+  "en_match": [
+   "dukhan"
+  ],
+  "ar": "دخان",
+  "bn_match": [
+   "দুখান"
+  ]
+ },
+ {
+  "n": 45,
+  "bn": "আল-জাসিয়া",
+  "en": "Al-Jathiyah",
+  "en_match": [
+   "jasiya",
+   "jasiyah",
+   "jathiya",
+   "jathiyah"
+  ],
+  "ar": "جاثية",
+  "bn_match": [
+   "জাসিয়া"
+  ]
+ },
+ {
+  "n": 46,
+  "bn": "আল-আহকাফ",
+  "en": "Al-Ahqaf",
+  "en_match": [
+   "ahqaf"
+  ],
+  "ar": "أحقاف",
+  "bn_match": [
+   "আহকাফ"
+  ]
+ },
+ {
+  "n": 47,
+  "bn": "মুহাম্মদ",
+  "en": "Muhammad",
+  "en_match": [
+   "muhammad"
+  ],
+  "ar": "محمد",
+  "bn_match": [
+   "মুহাম্মদ",
+   "মুহাম্মাদ"
+  ]
+ },
+ {
+  "n": 48,
+  "bn": "আল-ফাতহ",
+  "en": "Al-Fath",
+  "en_match": [
+   "fatah",
+   "fath"
+  ],
+  "ar": "فتح",
+  "bn_match": [
+   "ফাতহ",
+   "ফাতাহ"
+  ]
+ },
+ {
+  "n": 49,
+  "bn": "আল-হুজুরাত",
+  "en": "Al-Hujurat",
+  "en_match": [
+   "hujuraat",
+   "hujurat"
+  ],
+  "ar": "حجرات",
+  "bn_match": [
+   "হুজুরাত"
+  ]
+ },
+ {
+  "n": 50,
+  "bn": "ক্বাফ",
+  "en": "Qaf",
+  "en_match": [
+   "qaaf",
+   "qaf"
+  ],
+  "ar": "ق",
+  "bn_match": [
+   "ক্বাফ",
+   "কাফ"
+  ]
+ },
+ {
+  "n": 51,
+  "bn": "আয-যারিয়াত",
+  "en": "Adh-Dhariyat",
+  "en_match": [
+   "dhariyaat",
+   "dhariyat",
+   "zariyat"
+  ],
+  "ar": "ذاريات",
+  "bn_match": [
+   "যারিয়াত",
+   "জারিয়াত"
+  ]
+ },
+ {
+  "n": 52,
+  "bn": "আত-তূর",
+  "en": "At-Tur",
+  "en_match": [
+   "toor",
+   "tur"
+  ],
+  "ar": "طور",
+  "bn_match": [
+   "তূর",
+   "তুর"
+  ]
+ },
+ {
+  "n": 53,
+  "bn": "আন-নাজম",
+  "en": "An-Najm",
+  "en_match": [
+   "najm"
+  ],
+  "ar": "نجم",
+  "bn_match": [
+   "নাজম"
+  ]
+ },
+ {
+  "n": 54,
+  "bn": "আল-ক্বামার",
+  "en": "Al-Qamar",
+  "en_match": [
+   "qamar"
+  ],
+  "ar": "قمر",
+  "bn_match": [
+   "ক্বামার",
+   "কামার"
+  ]
+ },
+ {
+  "n": 55,
+  "bn": "আর-রহমান",
+  "en": "Ar-Rahman",
+  "en_match": [
+   "rahmaan",
+   "rahman"
+  ],
+  "ar": "رحمن",
+  "bn_match": [
+   "রহমান",
+   "রাহমান"
+  ]
+ },
+ {
+  "n": 56,
+  "bn": "আল-ওয়াকিয়া",
+  "en": "Al-Waqiah",
+  "en_match": [
+   "waqeah",
+   "waqia",
+   "waqiah",
+   "waqiya",
+   "waqiyah"
+  ],
+  "ar": "واقعة",
+  "bn_match": [
+   "ওয়াকিয়া",
+   "ওয়াকিআ",
+   "ওয়াক্বিয়া"
+  ]
+ },
+ {
+  "n": 57,
+  "bn": "আল-হাদীদ",
+  "en": "Al-Hadid",
+  "en_match": [
+   "hadeed",
+   "hadid"
+  ],
+  "ar": "حديد",
+  "bn_match": [
+   "হাদীদ",
+   "হাদিদ"
+  ]
+ },
+ {
+  "n": 58,
+  "bn": "আল-মুজাদালা",
+  "en": "Al-Mujadila",
+  "en_match": [
+   "mujadalah",
+   "mujadila",
+   "mujadilah"
+  ],
+  "ar": "مجادلة",
+  "bn_match": [
+   "মুজাদালা",
+   "মুজাদালাহ"
+  ]
+ },
+ {
+  "n": 59,
+  "bn": "আল-হাশর",
+  "en": "Al-Hashr",
+  "en_match": [
+   "hashr"
+  ],
+  "ar": "حشر",
+  "bn_match": [
+   "হাশর"
+  ]
+ },
+ {
+  "n": 60,
+  "bn": "আল-মুমতাহিনা",
+  "en": "Al-Mumtahanah",
+  "en_match": [
+   "mumtahanah",
+   "mumtahina",
+   "mumtahinah"
+  ],
+  "ar": "ممتحنة",
+  "bn_match": [
+   "মুমতাহিনা"
+  ]
+ },
+ {
+  "n": 61,
+  "bn": "আস-সাফ",
+  "en": "As-Saff",
+  "en_match": [
+   "saf",
+   "saff"
+  ],
+  "ar": "صف",
+  "bn_match": [
+   "সাফ",
+   "সফ"
+  ]
+ },
+ {
+  "n": 62,
+  "bn": "আল-জুমুআ",
+  "en": "Al-Jumuah",
+  "en_match": [
+   "juma",
+   "jumah",
+   "jumua",
+   "jumuah"
+  ],
+  "ar": "جمعة",
+  "bn_match": [
+   "জুমুআ",
+   "জুমা",
+   "জুমআ"
+  ]
+ },
+ {
+  "n": 63,
+  "bn": "আল-মুনাফিকুন",
+  "en": "Al-Munafiqun",
+  "en_match": [
+   "munafiqoon",
+   "munafiqun"
+  ],
+  "ar": "منافقون",
+  "bn_match": [
+   "মুনাফিকুন",
+   "মুনাফিকূন"
+  ]
+ },
+ {
+  "n": 64,
+  "bn": "আত-তাগাবুন",
+  "en": "At-Taghabun",
+  "en_match": [
+   "taghabun"
+  ],
+  "ar": "تغابن",
+  "bn_match": [
+   "তাগাবুন"
+  ]
+ },
+ {
+  "n": 65,
+  "bn": "আত-তালাক",
+  "en": "At-Talaq",
+  "en_match": [
+   "talaq"
+  ],
+  "ar": "طلاق",
+  "bn_match": [
+   "তালাক"
+  ]
+ },
+ {
+  "n": 66,
+  "bn": "আত-তাহরীম",
+  "en": "At-Tahrim",
+  "en_match": [
+   "tahreem",
+   "tahrim"
+  ],
+  "ar": "تحريم",
+  "bn_match": [
+   "তাহরীম",
+   "তাহরিম"
+  ]
+ },
+ {
+  "n": 67,
+  "bn": "আল-মুলক",
+  "en": "Al-Mulk",
+  "en_match": [
+   "mulk"
+  ],
+  "ar": "ملك",
+  "bn_match": [
+   "মুলক"
+  ]
+ },
+ {
+  "n": 68,
+  "bn": "আল-কলম",
+  "en": "Al-Qalam",
+  "en_match": [
+   "qalam"
+  ],
+  "ar": "قلم",
+  "bn_match": [
+   "কলম",
+   "ক্বালাম",
+   "কালাম"
+  ]
+ },
+ {
+  "n": 69,
+  "bn": "আল-হাক্কাহ",
+  "en": "Al-Haqqah",
+  "en_match": [
+   "haqqa",
+   "haqqah"
+  ],
+  "ar": "حاقة",
+  "bn_match": [
+   "হাক্কাহ",
+   "হাক্কা"
+  ]
+ },
+ {
+  "n": 70,
+  "bn": "আল-মাআরিজ",
+  "en": "Al-Maarij",
+  "en_match": [
+   "maarij"
+  ],
+  "ar": "معارج",
+  "bn_match": [
+   "মাআরিজ",
+   "মায়ারিজ"
+  ]
+ },
+ {
+  "n": 71,
+  "bn": "নূহ",
+  "en": "Nuh",
+  "en_match": [
+   "nooh",
+   "nuh"
+  ],
+  "ar": "نوح",
+  "bn_match": [
+   "নূহ",
+   "নুহ"
+  ]
+ },
+ {
+  "n": 72,
+  "bn": "আল-জিন",
+  "en": "Al-Jinn",
+  "en_match": [
+   "jin",
+   "jinn"
+  ],
+  "ar": "جن",
+  "bn_match": [
+   "জিন",
+   "জ্বিন"
+  ]
+ },
+ {
+  "n": 73,
+  "bn": "আল-মুযযাম্মিল",
+  "en": "Al-Muzzammil",
+  "en_match": [
+   "muzammil",
+   "muzzammil"
+  ],
+  "ar": "مزمل",
+  "bn_match": [
+   "মুযযাম্মিল",
+   "মুজাম্মিল"
+  ]
+ },
+ {
+  "n": 74,
+  "bn": "আল-মুদ্দাসসির",
+  "en": "Al-Muddaththir",
+  "en_match": [
+   "mudassir",
+   "muddassir",
+   "muddathir",
+   "muddaththir"
+  ],
+  "ar": "مدثر",
+  "bn_match": [
+   "মুদ্দাসসির",
+   "মুদ্দাস্সির"
+  ]
+ },
+ {
+  "n": 75,
+  "bn": "আল-কিয়ামাহ",
+  "en": "Al-Qiyamah",
+  "en_match": [
+   "qiyama",
+   "qiyamah",
+   "qiyamat"
+  ],
+  "ar": "قيامة",
+  "bn_match": [
+   "কিয়ামাহ",
+   "ক্বিয়ামাহ",
+   "কিয়ামা"
+  ]
+ },
+ {
+  "n": 76,
+  "bn": "আদ-দাহর",
+  "en": "Al-Insan",
+  "en_match": [
+   "dahr",
+   "insan"
+  ],
+  "ar": "إنسان",
+  "bn_match": [
+   "দাহর",
+   "ইনসান"
+  ]
+ },
+ {
+  "n": 77,
+  "bn": "আল-মুরসালাত",
+  "en": "Al-Mursalat",
+  "en_match": [
+   "mursalat"
+  ],
+  "ar": "مرسلات",
+  "bn_match": [
+   "মুরসালাত"
+  ]
+ },
+ {
+  "n": 78,
+  "bn": "আন-নাবা",
+  "en": "An-Naba",
+  "en_match": [
+   "naba",
+   "nabaa"
+  ],
+  "ar": "نبأ",
+  "bn_match": [
+   "নাবা"
+  ]
+ },
+ {
+  "n": 79,
+  "bn": "আন-নাযিআত",
+  "en": "An-Naziat",
+  "en_match": [
+   "naziaat",
+   "naziat"
+  ],
+  "ar": "نازعات",
+  "bn_match": [
+   "নাযিআত",
+   "নাজিয়াত"
+  ]
+ },
+ {
+  "n": 80,
+  "bn": "আবাসা",
+  "en": "Abasa",
+  "en_match": [
+   "abasa"
+  ],
+  "ar": "عبس",
+  "bn_match": [
+   "আবাসা"
+  ]
+ },
+ {
+  "n": 81,
+  "bn": "আত-তাকভীর",
+  "en": "At-Takwir",
+  "en_match": [
+   "takweer",
+   "takwir"
+  ],
+  "ar": "تكوير",
+  "bn_match": [
+   "তাকভীর",
+   "তাকবীর"
+  ]
+ },
+ {
+  "n": 82,
+  "bn": "আল-ইনফিতার",
+  "en": "Al-Infitar",
+  "en_match": [
+   "infitar"
+  ],
+  "ar": "انفطار",
+  "bn_match": [
+   "ইনফিতার"
+  ]
+ },
+ {
+  "n": 83,
+  "bn": "আল-মুতাফফিফীন",
+  "en": "Al-Mutaffifin",
+  "en_match": [
+   "mutaffifeen",
+   "mutaffifin"
+  ],
+  "ar": "مطففين",
+  "bn_match": [
+   "মুতাফফিফীন",
+   "মুতাফফিফিন"
+  ]
+ },
+ {
+  "n": 84,
+  "bn": "আল-ইনশিকাক",
+  "en": "Al-Inshiqaq",
+  "en_match": [
+   "inshiqaq"
+  ],
+  "ar": "انشقاق",
+  "bn_match": [
+   "ইনশিকাক"
+  ]
+ },
+ {
+  "n": 85,
+  "bn": "আল-বুরূজ",
+  "en": "Al-Buruj",
+  "en_match": [
+   "burooj",
+   "buruj"
+  ],
+  "ar": "بروج",
+  "bn_match": [
+   "বুরূজ",
+   "বুরুজ"
+  ]
+ },
+ {
+  "n": 86,
+  "bn": "আত-তারিক",
+  "en": "At-Tariq",
+  "en_match": [
+   "tariq"
+  ],
+  "ar": "طارق",
+  "bn_match": [
+   "তারিক"
+  ]
+ },
+ {
+  "n": 87,
+  "bn": "আল-আ'লা",
+  "en": "Al-Ala",
+  "en_match": [
+   "aala",
+   "ala"
+  ],
+  "ar": "أعلى",
+  "bn_match": [
+   "আ'লা",
+   "আলা"
+  ]
+ },
+ {
+  "n": 88,
+  "bn": "আল-গাশিয়াহ",
+  "en": "Al-Ghashiyah",
+  "en_match": [
+   "ghashiya",
+   "ghashiyah"
+  ],
+  "ar": "غاشية",
+  "bn_match": [
+   "গাশিয়াহ",
+   "গাশিয়া"
+  ]
+ },
+ {
+  "n": 89,
+  "bn": "আল-ফজর",
+  "en": "Al-Fajr",
+  "en_match": [
+   "fajr"
+  ],
+  "ar": "فجر",
+  "bn_match": [
+   "ফজর",
+   "ফাজর"
+  ]
+ },
+ {
+  "n": 90,
+  "bn": "আল-বালাদ",
+  "en": "Al-Balad",
+  "en_match": [
+   "balad"
+  ],
+  "ar": "بلد",
+  "bn_match": [
+   "বালাদ"
+  ]
+ },
+ {
+  "n": 91,
+  "bn": "আশ-শামস",
+  "en": "Ash-Shams",
+  "en_match": [
+   "shams"
+  ],
+  "ar": "شمس",
+  "bn_match": [
+   "শামস"
+  ]
+ },
+ {
+  "n": 92,
+  "bn": "আল-লাইল",
+  "en": "Al-Layl",
+  "en_match": [
+   "lail",
+   "layl"
+  ],
+  "ar": "ليل",
+  "bn_match": [
+   "লাইল"
+  ]
+ },
+ {
+  "n": 93,
+  "bn": "আদ-দুহা",
+  "en": "Ad-Duha",
+  "en_match": [
+   "dhuha",
+   "duha"
+  ],
+  "ar": "ضحى",
+  "bn_match": [
+   "দুহা",
+   "দোহা",
+   "দ্বোহা"
+  ]
+ },
+ {
+  "n": 94,
+  "bn": "আল-ইনশিরাহ",
+  "en": "Ash-Sharh",
+  "en_match": [
+   "alamnashrah",
+   "inshirah",
+   "sharh"
+  ],
+  "ar": "شرح",
+  "bn_match": [
+   "ইনশিরাহ",
+   "আলাম নাশরাহ"
+  ]
+ },
+ {
+  "n": 95,
+  "bn": "আত-তীন",
+  "en": "At-Tin",
+  "en_match": [
+   "teen",
+   "tin"
+  ],
+  "ar": "تين",
+  "bn_match": [
+   "তীন",
+   "ত্বীন"
+  ]
+ },
+ {
+  "n": 96,
+  "bn": "আল-আলাক",
+  "en": "Al-Alaq",
+  "en_match": [
+   "alaq"
+  ],
+  "ar": "علق",
+  "bn_match": [
+   "আলাক"
+  ]
+ },
+ {
+  "n": 97,
+  "bn": "আল-কদর",
+  "en": "Al-Qadr",
+  "en_match": [
+   "qadr"
+  ],
+  "ar": "قدر",
+  "bn_match": [
+   "কদর",
+   "ক্বদর"
+  ]
+ },
+ {
+  "n": 98,
+  "bn": "আল-বাইয়্যিনাহ",
+  "en": "Al-Bayyinah",
+  "en_match": [
+   "bayinah",
+   "bayyina",
+   "bayyinah"
+  ],
+  "ar": "بينة",
+  "bn_match": [
+   "বাইয়্যিনাহ",
+   "বাইয়িনাহ",
+   "বাইয়েনা"
+  ]
+ },
+ {
+  "n": 99,
+  "bn": "আয-যিলযাল",
+  "en": "Az-Zalzalah",
+  "en_match": [
+   "zalzala",
+   "zalzalah",
+   "zilzal"
+  ],
+  "ar": "زلزلة",
+  "bn_match": [
+   "যিলযাল",
+   "যিলযালাহ",
+   "জিলজাল"
+  ]
+ },
+ {
+  "n": 100,
+  "bn": "আল-আদিয়াত",
+  "en": "Al-Adiyat",
+  "en_match": [
+   "aadiyat",
+   "adiyat"
+  ],
+  "ar": "عاديات",
+  "bn_match": [
+   "আদিয়াত"
+  ]
+ },
+ {
+  "n": 101,
+  "bn": "আল-কারিআহ",
+  "en": "Al-Qariah",
+  "en_match": [
+   "qaria",
+   "qariah",
+   "qariyah"
+  ],
+  "ar": "قارعة",
+  "bn_match": [
+   "কারিআহ",
+   "ক্বারিয়া",
+   "কারিয়া"
+  ]
+ },
+ {
+  "n": 102,
+  "bn": "আত-তাকাসুর",
+  "en": "At-Takathur",
+  "en_match": [
+   "takasur",
+   "takathur"
+  ],
+  "ar": "تكاثر",
+  "bn_match": [
+   "তাকাসুর"
+  ]
+ },
+ {
+  "n": 103,
+  "bn": "আল-আসর",
+  "en": "Al-Asr",
+  "en_match": [
+   "asr"
+  ],
+  "ar": "عصر",
+  "bn_match": [
+   "আসর"
+  ]
+ },
+ {
+  "n": 104,
+  "bn": "আল-হুমাযাহ",
+  "en": "Al-Humazah",
+  "en_match": [
+   "humaza",
+   "humazah"
+  ],
+  "ar": "همزة",
+  "bn_match": [
+   "হুমাযাহ",
+   "হুমাযা",
+   "হুমাজা"
+  ]
+ },
+ {
+  "n": 105,
+  "bn": "আল-ফীল",
+  "en": "Al-Fil",
+  "en_match": [
+   "feel",
+   "fil"
+  ],
+  "ar": "فيل",
+  "bn_match": [
+   "ফীল",
+   "ফিল"
+  ]
+ },
+ {
+  "n": 106,
+  "bn": "কুরাইশ",
+  "en": "Quraysh",
+  "en_match": [
+   "quraish",
+   "quraysh"
+  ],
+  "ar": "قريش",
+  "bn_match": [
+   "কুরাইশ"
+  ]
+ },
+ {
+  "n": 107,
+  "bn": "আল-মাউন",
+  "en": "Al-Maun",
+  "en_match": [
+   "maoon",
+   "maun"
+  ],
+  "ar": "ماعون",
+  "bn_match": [
+   "মাউন"
+  ]
+ },
+ {
+  "n": 108,
+  "bn": "আল-কাওসার",
+  "en": "Al-Kawthar",
+  "en_match": [
+   "kausar",
+   "kawsar",
+   "kawthar"
+  ],
+  "ar": "كوثر",
+  "bn_match": [
+   "কাওসার",
+   "কাউসার"
+  ]
+ },
+ {
+  "n": 109,
+  "bn": "আল-কাফিরুন",
+  "en": "Al-Kafirun",
+  "en_match": [
+   "kafiroon",
+   "kafirun"
+  ],
+  "ar": "كافرون",
+  "bn_match": [
+   "কাফিরুন",
+   "কাফিরূন"
+  ]
+ },
+ {
+  "n": 110,
+  "bn": "আন-নাসর",
+  "en": "An-Nasr",
+  "en_match": [
+   "nasr"
+  ],
+  "ar": "نصر",
+  "bn_match": [
+   "নাসর"
+  ]
+ },
+ {
+  "n": 111,
+  "bn": "আল-লাহাব",
+  "en": "Al-Masad",
+  "en_match": [
+   "lahab",
+   "masad"
+  ],
+  "ar": "مسد",
+  "bn_match": [
+   "লাহাব",
+   "মাসাদ"
+  ]
+ },
+ {
+  "n": 112,
+  "bn": "আল-ইখলাস",
+  "en": "Al-Ikhlas",
+  "en_match": [
+   "ikhlas"
+  ],
+  "ar": "إخلاص",
+  "bn_match": [
+   "ইখলাস"
+  ]
+ },
+ {
+  "n": 113,
+  "bn": "আল-ফালাক",
+  "en": "Al-Falaq",
+  "en_match": [
+   "falaq"
+  ],
+  "ar": "فلق",
+  "bn_match": [
+   "ফালাক"
+  ]
+ },
+ {
+  "n": 114,
+  "bn": "আন-নাস",
+  "en": "An-Nas",
+  "en_match": [
+   "naas",
+   "nas"
+  ],
+  "ar": "ناس",
+  "bn_match": [
+   "নাস"
+  ]
+ }
+]

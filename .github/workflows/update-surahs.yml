@@ -1,0 +1,91 @@
+name: Update Quran surahs (114)
+
+on:
+  schedule:
+    # প্রতিদিন UTC 08:17 = বাংলাদেশ দুপুর ২:১৭ — YouTube দৈনিক কোটা রিসেটের (UTC 07:00) পরে,
+    # যাতে সকালের বক্তা-আপডেটের সাথে মিলে দৈনিক ১০,০০০ সীমা না ছাড়ায়।
+    # ১১৪টি সূরা শেষ হলে এটা আর কোনো কোটা খরচ করে না।
+    - cron: "17 8 * * *"
+  workflow_dispatch:
+    inputs:
+      budget:
+        description: "এই রানের quota সীমা (প্রতি সূরা ~১০১ ইউনিট)"
+        required: false
+        default: "6000"
+      dry_run:
+        description: "শুধু রিপোর্ট দেখাবে, ফাইল বদলাবে না"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  # বক্তা-আপডেটের সাথে একই গ্রুপ — দুটো একসাথে চলে commit-এ সংঘর্ষ করবে না
+  group: update-videos
+  cancel-in-progress: false
+
+jobs:
+  surahs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Unit tests (offline, no quota used)
+        run: python -m unittest discover -s scripts -p "test_*.py"
+
+      - name: Fetch surah recitations
+        id: fetch
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          BUDGET: ${{ github.event.inputs.budget || '6000' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          if [ -z "$YT_API_KEY" ]; then
+            echo "::warning::YT_API_KEY secret নেই — স্কিপ"
+            echo "code=skip" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          ARGS=(--budget "$BUDGET" --report-json surah_report.json)
+          [ "$DRY_RUN" = "true" ] && ARGS+=(--dry-run)
+          set +e
+          python scripts/update_surahs.py "${ARGS[@]}"
+          code=$?
+          set -e
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          [ "$code" = "0" ] || echo "::error::সূরা আপডেট ফেল (exit $code) — আসল JSON অক্ষত"
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surah-report
+          path: surah_report.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Commit & push if changed
+        if: steps.fetch.outputs.code == '0'
+        run: |
+          if [ -z "$(git status --porcelain -- video_studio.json video_meta.json scripts/surah_progress.json)" ]; then
+            echo "No changes"; exit 0
+          fi
+          python -c "import json;d=json.load(open('video_studio.json',encoding='utf-8'));assert list(d)==['itemType'] and len(d['itemType'])>100"
+          git config user.name  "waz-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add video_studio.json video_meta.json scripts/surah_progress.json
+          git commit -m "auto: Quran surah recitations ($(date -u +%Y-%m-%d))"
+          for i in 1 2 3; do
+            git pull --rebase --quiet && git push && exit 0
+            sleep $((i * 5))
+          done
+          echo "::error::push ব্যর্থ"; exit 1
+
+      - name: Fail job on script error
+        if: steps.fetch.outputs.code != '0' && steps.fetch.outputs.code != 'skip'
+        run: exit 1
