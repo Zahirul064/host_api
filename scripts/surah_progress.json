@@ -465,8 +465,9 @@
     "video_id": "ypqq9quWfkM"
   },
   "94": {
-    "status": "retry",
-    "tries": 1
+    "status": "done",
+    "tries": 2,
+    "video_id": "Fvg36C0_N5U"
   },
   "95": {
     "status": "done",
@@ -554,8 +555,14 @@
     "video_id": "bQIS_8cMS_k"
   },
   "112": {
-    "status": "retry",
-    "tries": 1
+    "status": "done",
+    "tries": 2,
+    "video_id": "OquUdWeXbVc"
+  },
+  "113": {
+    "status": "done",
+    "tries": 1,
+    "video_id": "nywLc6d-G3A"
   },
   "114": {
     "status": "done",
