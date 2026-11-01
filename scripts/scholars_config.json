@@ -1,6 +1,6 @@
 {
   "_comment": "key = video_studio.json-এর itemType (হুবহু)। queries = YouTube সার্চ শব্দ (বাংলা/ইংরেজি, প্রতিটি ১০০ ইউনিট)। must_match = টাইটেলে এগুলোর অন্তত একটি থাকতেই হবে (বক্তার নামের বিভিন্ন বানান)। channel_ids = অফিসিয়াল চ্যানেল (UC...), সবচেয়ে নির্ভুল ও সস্তা। auto=false হলে শুধু হাতে আপডেট।",
-  "blocked_video_ids": ["609_X1CXs-k", "RBbTftpzemY"],
+  "blocked_video_ids": ["609_X1CXs-k", "RBbTftpzemY", "X7fvH8YwRUQ", "XW4UID_Lbcc", "6WpxgRzuZ4M", "1xrqNBtqp8s", "mcv8asQz_ik"],
   "defaults": {
     "lookback_days": 180,
     "sort_by": "viewCount",
@@ -25,21 +25,11 @@
     "ফানি",
     "কৌতুক"
   ],
-  "blocked_title_substrings": [
-    "নির্বাচন",
-    "নির্বাচনী",
-    "লংমার্চ",
-    "লং মার্চ",
-    "জোট",
-    "election",
-    "long march",
-    "🔴",
-    "লাইভ"
-  ],
+  "blocked_title_substrings": ["নির্বাচন", "নির্বাচনী", "লংমার্চ", "লং মার্চ", "জোট", "election", "long march", "🔴", "লাইভ", "প্রতিবাদী", "justice for"],
   "blocked_title_words_case_sensitive": [
     "LIVE"
   ],
-  "blocked_channel_ids": [],
+  "blocked_channel_ids": ["UC5AkNA_2BicW3k_90BS-6Fg", "UCV0sfBNYrfjFvDMWRYVBw4g"],
   "scholars": [
     {"key": "Mizanur_Rahman_Azhari", "auto": true, "queries": ["মিজানুর রহমান আজহারী ওয়াজ", "Mizanur Rahman Azhari waz"], "must_match": ["আজহারী", "আজহারি", "azhari", "azhary"]},
     {"key": "DR_ZAKIR_NAIK", "auto": true, "min_duration_sec": 180, "queries": ["জাকির নায়েক বাংলা লেকচার", "Zakir Naik bangla lecture"], "must_match": ["জাকির নায়েক", "জাকির নায়েক", "zakir naik"]},
