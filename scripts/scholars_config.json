@@ -1,5 +1,6 @@
 {
   "_comment": "key = video_studio.json-এর itemType (হুবহু)। queries = YouTube সার্চ শব্দ (বাংলা/ইংরেজি, প্রতিটি ১০০ ইউনিট)। must_match = টাইটেলে এগুলোর অন্তত একটি থাকতেই হবে (বক্তার নামের বিভিন্ন বানান)। channel_ids = অফিসিয়াল চ্যানেল (UC...), সবচেয়ে নির্ভুল ও সস্তা। auto=false হলে শুধু হাতে আপডেট।",
+  "blocked_video_ids": ["609_X1CXs-k", "RBbTftpzemY"],
   "defaults": {
     "lookback_days": 180,
     "sort_by": "viewCount",

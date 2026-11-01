@@ -488,6 +488,8 @@ def run(args) -> int:
         seen.add(vid)
     rep.existing_duplicates = sorted(set(dups))
     seen_titles = {title_key(it["title"]) for it in items}
+    # হাতে সরানো ভিডিও (ভুল বক্তা/অপ্রাসঙ্গিক) — পরের রানে আবার যেন না আসে
+    blocked_ids = set(conf.get("blocked_video_ids", []))
     channel_count: dict[str, int] = {}
 
     key = os.environ.get("YT_API_KEY", "").strip()
@@ -512,7 +514,7 @@ def run(args) -> int:
         try:
             from_pl: set = set()
             cand = discover(sch, cfg, key, quota, since, rep, from_pl)
-            fresh = [c for c in cand if c not in seen]
+            fresh = [c for c in cand if c not in seen and c not in blocked_ids]
             rep.skipped["already in file"] = rep.skipped.get("already in file", 0) + len(cand) - len(fresh)
             details = fetch_details(fresh, key, quota) if fresh else {}
         except InvalidKeyError as e:

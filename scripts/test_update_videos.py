@@ -442,6 +442,13 @@ class PlaylistSpeakerTests(Base):
         self.assertEqual(sum(1 for c in f.calls if c[0] == "playlistItems"), 2)   # ২ পাতা
         self.assertEqual(self.items()[:len(EXISTING)], EXISTING)                 # পুরনো অক্ষত, নতুন শেষে
 
+    def test_blocked_video_ids_never_return(self):
+        conf = json.loads(self.conf.read_text(encoding="utf-8"))
+        conf["blocked_video_ids"] = ["PLvideo0001"]
+        self.conf.write_text(json.dumps(conf, ensure_ascii=False), encoding="utf-8")
+        self.run_main(self.fake(), "--only", "Tariq_Jameel")
+        self.assertNotIn("PLvideo0001", [i["video_id"] for i in self.items()])
+
     def test_playlist_only_speaker_is_valid_config(self):
         conf = uv.load_config(self.conf)   # queries ছাড়া শুধু playlist_ids থাকলেও বৈধ
         self.assertEqual(conf["scholars"][-1]["key"], "Tariq_Jameel")
