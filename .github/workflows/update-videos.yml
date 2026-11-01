@@ -15,6 +15,10 @@ on:
         description: "প্রতি ক্যাটাগরিতে সর্বোচ্চ নতুন ভিডিও"
         required: false
         default: "5"
+      only:
+        description: "শুধু এই বক্তাদের (key, স্পেস দিয়ে আলাদা) — খালি = সবাই"
+        required: false
+        default: ""
       dry_run:
         description: "শুধু রিপোর্ট দেখাবে, ফাইল বদলাবে না"
         type: boolean
@@ -53,6 +57,7 @@ jobs:
           MAX_NEW: ${{ github.event.inputs.max_new || '5' }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           PRUNE: ${{ github.event.inputs.prune || 'false' }}
+          ONLY: ${{ github.event.inputs.only || '' }}
         run: |
           if [ -z "$YT_API_KEY" ]; then
             echo "::warning::YT_API_KEY secret এখনো সেট করা নেই — আজকের আপডেট স্কিপ (Settings → Secrets and variables → Actions)"
@@ -63,6 +68,11 @@ jobs:
           ARGS=(--lookback-days "$LOOKBACK" --max-new "$MAX_NEW" --report-json run_report.json)
           [ "$DRY_RUN" = "true" ] && ARGS+=(--dry-run)
           [ "$PRUNE" = "true" ] && ARGS+=(--prune)
+          if [ -n "$ONLY" ]; then
+            # শুধু key-এর মতো শব্দ (ইংরেজি অক্ষর/সংখ্যা/_) নেওয়া হয়
+            read -r -a KEYS <<< "$(echo "$ONLY" | tr -cd 'A-Za-z0-9_ ')"
+            ARGS+=(--only "${KEYS[@]}")
+          fi
           set +e
           python scripts/update_videos.py "${ARGS[@]}"
           code=$?

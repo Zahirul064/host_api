@@ -274,7 +274,9 @@ def is_playable(v: dict) -> bool:
             and sn.get("liveBroadcastContent", "none") == "none")
 
 
-def discover(sch: dict, cfg: dict, key: str, quota: QuotaGuard, since: str, rep: Report) -> list[str]:
+def discover(sch: dict, cfg: dict, key: str, quota: QuotaGuard, since: str, rep: Report,
+             from_playlist: set | None = None) -> list[str]:
+    """প্রার্থী ভিডিও আইডি। from_playlist দিলে প্লেলিস্ট থেকে পাওয়া আইডিগুলো সেখানে জমা হয়।"""
     ids: list[str] = []
     for ch in sch.get("channel_ids", []):
         if not (isinstance(ch, str) and ch.startswith("UC") and len(ch) == 24):
@@ -291,6 +293,32 @@ def discover(sch: dict, cfg: dict, key: str, quota: QuotaGuard, since: str, rep:
             raise
         except ApiError as e:
             rep.failed.append((sch["key"], f"channel {ch}: {e}"))
+    # বক্তার নির্দিষ্ট প্লেলিস্ট (ব্যবহারকারীর বেছে দেওয়া) — সব ভিডিও প্রার্থী, তারিখ সীমা নেই;
+    # প্রতি পাতায় ৫০টি, সর্বোচ্চ ৪ পাতা (প্রতি পাতা ১ ইউনিট)
+    for pl in sch.get("playlist_ids", []):
+        if not (isinstance(pl, str) and re.fullmatch(r"[A-Za-z0-9_-]{10,64}", pl)):
+            rep.failed.append((sch["key"], f"bad playlist id {pl!r}"))
+            continue
+        token = ""
+        try:
+            for _ in range(4):
+                params = {"part": "contentDetails", "playlistId": pl, "maxResults": 50}
+                if token:
+                    params["pageToken"] = token
+                data = api_get("playlistItems", params, key, quota)
+                for it in data.get("items") or []:
+                    cd = (it or {}).get("contentDetails") or {}
+                    if isinstance(cd.get("videoId"), str):
+                        ids.append(cd["videoId"])
+                        if from_playlist is not None:
+                            from_playlist.add(cd["videoId"])
+                token = data.get("nextPageToken") or ""
+                if not token:
+                    break
+        except (InvalidKeyError, QuotaError):
+            raise
+        except ApiError as e:
+            rep.failed.append((sch["key"], f"playlist {pl}: {e}"))
     for q in sch.get("queries", []):
         try:
             data = api_get("search", {
@@ -326,7 +354,9 @@ def _view_count(v: dict) -> int:
 
 
 def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_ch, rep: Report,
-                 blocked_subs=(), blocked_cs=()):
+                 blocked_subs=(), blocked_cs=(), trusted=False):
+    """trusted=True: ব্যবহারকারীর বেছে দেওয়া প্লেলিস্টের ভিডিও — নাম মেলানো ও বাংলা-শিরোনাম শর্ত লাগে না
+    (বাকি সব ফিল্টার — LIVE, রাজনৈতিক শব্দ, দৈর্ঘ্য, embed — আগের মতোই)।"""
     if not is_playable(v):
         rep.skip("not public/embeddable/live")
         return None
@@ -341,8 +371,12 @@ def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_c
     if title_blocked(title, blocked_words, blocked_subs, blocked_cs):
         rep.skip("blocked word")
         return None
-    if not title_matches(title, sch.get("must_match", [])):
+    if not trusted and not title_matches(title, sch.get("must_match", [])):
         rep.skip("speaker name not in title")
+        return None
+    # বাংলা অনুবাদ/সাবটাইটেলের ভিডিওই চাই (যেমন উর্দু বক্তা) — শিরোনামে বাংলা অক্ষর থাকতে হবে
+    if not trusted and sch.get("require_bangla_title") and not re.search(r"[\u0980-\u09FF]", title):
+        rep.skip("title not in Bangla")
         return None
     min_d = sch.get("min_duration_sec", cfg["min_duration_sec"])
     if iso_duration_seconds(cd.get("duration", "")) < min_d:
@@ -401,8 +435,8 @@ def load_config(path: Path) -> dict:
         if not KEY_RE.match(k) or k in keys:
             raise ValidationError(f"config: bad or duplicate key {k!r}")
         keys.add(k)
-        if s.get("auto") and not (s.get("queries") or s.get("channel_ids")):
-            raise ValidationError(f"config: {k} is auto but has no queries/channel_ids")
+        if s.get("auto") and not (s.get("queries") or s.get("channel_ids") or s.get("playlist_ids")):
+            raise ValidationError(f"config: {k} is auto but has no queries/channel_ids/playlist_ids")
     return conf
 
 
@@ -476,7 +510,8 @@ def run(args) -> int:
             continue
         attempted += 1
         try:
-            cand = discover(sch, cfg, key, quota, since, rep)
+            from_pl: set = set()
+            cand = discover(sch, cfg, key, quota, since, rep, from_pl)
             fresh = [c for c in cand if c not in seen]
             rep.skipped["already in file"] = rep.skipped.get("already in file", 0) + len(cand) - len(fresh)
             details = fetch_details(fresh, key, quota) if fresh else {}
@@ -496,7 +531,8 @@ def run(args) -> int:
             if v is None:
                 rep.skip("no details returned")
                 continue
-            built = build_record(k, v, sch, cfg, blocked_words, blocked_ch, rep, blocked_subs, blocked_cs)
+            built = build_record(k, v, sch, cfg, blocked_words, blocked_ch, rep, blocked_subs, blocked_cs,
+                                 trusted=vid in from_pl)
             if built:
                 recs.append(built)
         # sort_by = "viewCount": সবচেয়ে বেশি দেখা আগে; নইলে নতুনতম আগে

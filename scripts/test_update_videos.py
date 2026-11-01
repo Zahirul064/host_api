@@ -84,6 +84,13 @@ class FakeYouTube:
             if isinstance(r, Exception):
                 raise r
             return {"items": [{"id": {"videoId": i}} for i in r]}
+        if endpoint == "playlistItems" and "pages" in self.__dict__ and params["playlistId"] in self.pages:
+            pages = self.pages[params["playlistId"]]
+            i = int(params.get("pageToken") or 0)
+            out = {"items": [{"contentDetails": {"videoId": v}} for v in pages[i]]}
+            if i + 1 < len(pages):
+                out["nextPageToken"] = str(i + 1)
+            return out
         if endpoint == "videos":
             return {"items": [self.videos[i] for i in params["id"].split(",") if i in self.videos]}
         return {"items": []}
@@ -400,6 +407,46 @@ class PipelineTests(Base):
         self.assertEqual(self.run_main(FakeYouTube({}, [])), 2)
 
 
+class PlaylistSpeakerTests(Base):
+    """নতুন বক্তা: নির্দিষ্ট প্লেলিস্ট থেকে, শুধু বাংলা শিরোনাম, JSON-এ আগে না থাকলেও যোগ হয়।"""
+    def setUp(self):
+        super().setUp()
+        conf = json.loads(json.dumps(CONFIG))
+        conf["blocked_title_words_case_sensitive"] = ["LIVE"]
+        conf["defaults"]["max_new_per_category"] = 10
+        conf["scholars"].append({"key": "Tariq_Jameel", "auto": True, "require_bangla_title": True,
+                                 "playlist_ids": ["PLtestPlaylist01"], "queries": ["তারিক জামিল বাংলা"],
+                                 "must_match": ["তারিক জামিল", "tariq jameel"]})
+        self.conf.write_text(json.dumps(conf, ensure_ascii=False), encoding="utf-8")
+
+    def fake(self):
+        f = FakeYouTube({"তারিক জামিল বাংলা": ["SRvideo0001", "SRvideo0002"]}, [
+            video("SRvideo0001", "Tariq Jameel bayan english title", views=9000),   # সার্চ: বাংলা নয় → বাদ
+            video("SRvideo0002", "তারিক জামিলের বয়ান বাংলা অনুবাদ", views=50),       # সার্চ: বাংলা → নেবে
+
+            video("PLvideo0001", "তারিক জামিল বাংলা বয়ান | মৃত্যুর পর", views=900),
+            video("PLvideo0002", "Who Was Sultan Mahmood Ghaznavi | Molana Tariq Jameel", views=5000,
+                  ch="UCplplplplplplplplplplpl"),
+            video("PLvideo0003", "আখিরাতের প্রস্তুতি", views=300, pub="2019-01-01T00:00:00Z",
+                  ch="UCplplplplplplplplplplpl"),
+            video("PLvideo0004", "Tariq Jameel LIVE bayan", views=800)])           # LIVE → বাদ
+        f.pages = {"PLtestPlaylist01": [["PLvideo0001", "PLvideo0002"], ["PLvideo0003", "PLvideo0004"]]}
+        return f
+
+    def test_playlist_pages_and_bangla_filter(self):
+        f = self.fake()
+        self.assertEqual(self.run_main(f, "--only", "Tariq_Jameel"), 0)
+        got = [i["video_id"] for i in self.items() if i["itemType"] == "Tariq_Jameel"]
+        # প্লেলিস্টের ভিডিও বিশ্বস্ত (ইংরেজি শিরোনাম/নাম না থাকলেও); সার্চে শুধু বাংলা; LIVE সবখানে বাদ
+        self.assertEqual(sorted(got), ["PLvideo0001", "PLvideo0002", "PLvideo0003", "SRvideo0002"])
+        self.assertEqual(sum(1 for c in f.calls if c[0] == "playlistItems"), 2)   # ২ পাতা
+        self.assertEqual(self.items()[:len(EXISTING)], EXISTING)                 # পুরনো অক্ষত, নতুন শেষে
+
+    def test_playlist_only_speaker_is_valid_config(self):
+        conf = uv.load_config(self.conf)   # queries ছাড়া শুধু playlist_ids থাকলেও বৈধ
+        self.assertEqual(conf["scholars"][-1]["key"], "Tariq_Jameel")
+
+
 class ApiLayerTests(unittest.TestCase):
     def setUp(self):
         self.sleeps = []
@@ -487,8 +534,15 @@ class RealRepoFileTests(unittest.TestCase):
         existing = set(dart_video_counts(body))
         for s in conf["scholars"]:
             self.assertRegex(s["key"], r"^[A-Za-z0-9_]+$")
-        missing = {s["key"] for s in conf["scholars"]} - existing
+        # নতুন বক্তা (auto) এখনো JSON-এ না থাকতে পারে — প্রথম রানে যোগ হবে;
+        # কিন্তু manual বিভাগের key অবশ্যই JSON-এ থাকতে হবে (টাইপো ধরতে)
+        missing = {s["key"] for s in conf["scholars"] if not s.get("auto")} - existing
         self.assertEqual(missing, set(), f"config keys not in JSON (typo?): {missing}")
+        icons = {i.get("key") for i in json.loads(REPO_ICONS.read_text(encoding="utf-8"))} \
+            if REPO_ICONS.exists() else None
+        if icons is not None:
+            new = {s["key"] for s in conf["scholars"]} - existing
+            self.assertEqual(new - icons, set(), f"new speakers need a waz_icone.json entry: {new - icons}")
 
     def test_no_duplicate_video_ids(self):
         ids = [i["video_id"] for i in json.loads(REPO_JSON.read_text(encoding="utf-8"))["itemType"]]
@@ -505,7 +559,9 @@ class RealRepoFileTests(unittest.TestCase):
         self.assertEqual(len(keys), len(set(keys)), "duplicate key in waz_icone.json")
         types = set(dart_video_counts(REPO_JSON.read_text(encoding="utf-8")))
         self.assertEqual(types - set(keys), set(), "categories missing from waz_icone.json")
-        self.assertEqual(set(keys) - types, set(), "waz_icone.json key not found in video_studio.json")
+        conf_keys = {s["key"] for s in uv.load_config(Path(__file__).parent / "scholars_config.json")["scholars"]}
+        self.assertEqual(set(keys) - types - conf_keys, set(),
+                         "waz_icone.json key not found in video_studio.json or config")
         for i in icons:
             for f in ("imageUrl", "cat_title", "cat_subtitle", "serverUrl"):
                 self.assertIsInstance(i.get(f), str, f"{i.get('key')}: {f}")
