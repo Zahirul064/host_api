@@ -1,6 +1,6 @@
 {
   "_comment": "key = video_studio.json-এর itemType (হুবহু)। queries = YouTube সার্চ শব্দ (বাংলা/ইংরেজি, প্রতিটি ১০০ ইউনিট)। must_match = টাইটেলে এগুলোর অন্তত একটি থাকতেই হবে (বক্তার নামের বিভিন্ন বানান)। channel_ids = অফিসিয়াল চ্যানেল (UC...), সবচেয়ে নির্ভুল ও সস্তা। auto=false হলে শুধু হাতে আপডেট।",
-  "blocked_video_ids": ["609_X1CXs-k", "RBbTftpzemY", "X7fvH8YwRUQ", "XW4UID_Lbcc", "6WpxgRzuZ4M", "1xrqNBtqp8s", "mcv8asQz_ik"],
+  "blocked_video_ids": ["609_X1CXs-k", "RBbTftpzemY", "X7fvH8YwRUQ", "XW4UID_Lbcc", "6WpxgRzuZ4M", "1xrqNBtqp8s", "mcv8asQz_ik", "c6VcivI7N-Q", "IB_bbaBBG_0", "ZLkwuFJfh14", "5361Wvz1G_8"],
   "defaults": {
     "lookback_days": 180,
     "sort_by": "viewCount",
@@ -25,7 +25,7 @@
     "ফানি",
     "কৌতুক"
   ],
-  "blocked_title_substrings": ["নির্বাচন", "নির্বাচনী", "লংমার্চ", "লং মার্চ", "জোট", "election", "long march", "🔴", "লাইভ", "প্রতিবাদী", "justice for"],
+  "blocked_title_substrings": ["নির্বাচন", "নির্বাচনী", "লংমার্চ", "লং মার্চ", "জোট", "election", "long march", "🔴", "লাইভ", "প্রতিবাদী", "justice for", "বিয়েতে", "বিয়ের", "গায়ে হলুদ", "এমপি"],
   "blocked_title_words_case_sensitive": [
     "LIVE"
   ],
