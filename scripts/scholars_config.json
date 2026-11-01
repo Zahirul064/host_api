@@ -64,8 +64,8 @@
     {"key": "Quran_EDucation", "auto": false},
     {"key": "Quran_Recitation", "auto": false},
     {"key": "Dua_and_Zikir", "auto": false},
-    {"key": "Bangla_Gojol", "auto": false},
-    {"key": "Popular_BD_Gojol", "auto": false},
+    {"key": "Bangla_Gojol", "auto": true, "require_bangla_title": true, "min_duration_sec": 150, "max_duration_sec": 1200, "must_match": ["গজল", "গজাল", "gojol", "gozol", "gazal", "ghazal", "নাশিদ", "নাশীদ", "nasheed", "nashid", "ইসলামী সংগীত", "ইসলামিক সংগীত", "ইসলামী গান", "ইসলামিক গান", "islamic song", "হামদ", "naat", "কলরব", "kalarab", "হলি টিউন", "holy tune"], "queries": ["ইসলামিক বাংলা গজল", "নতুন ইসলামী সংগীত", "বাংলা নাশিদ"]},
+    {"key": "Popular_BD_Gojol", "auto": true, "require_bangla_title": true, "min_duration_sec": 150, "max_duration_sec": 1200, "must_match": ["গজল", "গজাল", "gojol", "gozol", "gazal", "ghazal", "নাশিদ", "নাশীদ", "nasheed", "nashid", "ইসলামী সংগীত", "ইসলামিক সংগীত", "ইসলামী গান", "ইসলামিক গান", "islamic song", "হামদ", "naat", "কলরব", "kalarab", "হলি টিউন", "holy tune"], "queries": ["জনপ্রিয় বাংলা গজল", "কলরব গজল", "হলি টিউন গজল"]},
     {"key": "Bangla_Poetry", "auto": false},
     {"key": "names_of_Allah", "auto": false}
   ]

@@ -449,6 +449,14 @@ class PlaylistSpeakerTests(Base):
         self.run_main(self.fake(), "--only", "Tariq_Jameel")
         self.assertNotIn("PLvideo0001", [i["video_id"] for i in self.items()])
 
+    def test_max_duration_skips_long_compilations(self):
+        conf = json.loads(self.conf.read_text(encoding="utf-8"))
+        conf["scholars"][-1]["max_duration_sec"] = 1200
+        self.conf.write_text(json.dumps(conf, ensure_ascii=False), encoding="utf-8")
+        self.run_main(self.fake(), "--only", "Tariq_Jameel")        # সব টেস্ট ভিডিও ৪০ মিনিট
+        self.assertEqual([i for i in self.items() if i["itemType"] == "Tariq_Jameel"], [])
+        self.assertIn("too long", self.output)
+
     def test_playlist_only_speaker_is_valid_config(self):
         conf = uv.load_config(self.conf)   # queries ছাড়া শুধু playlist_ids থাকলেও বৈধ
         self.assertEqual(conf["scholars"][-1]["key"], "Tariq_Jameel")

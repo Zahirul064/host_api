@@ -382,6 +382,11 @@ def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_c
     if iso_duration_seconds(cd.get("duration", "")) < min_d:
         rep.skip("too short")
         return None
+    # গজল/সংগীতের মতো বিভাগে খুব লম্বা সংকলন বাদ (max_duration_sec না থাকলে সীমা নেই)
+    max_d = sch.get("max_duration_sec")
+    if max_d and iso_duration_seconds(cd.get("duration", "")) > max_d:
+        rep.skip("too long")
+        return None
     pub = sn.get("publishedAt", "")
     if not valid_iso_date(pub):
         rep.skip("bad publish date")
