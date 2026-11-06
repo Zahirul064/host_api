@@ -51,6 +51,7 @@
     {"key": "Abubakar_Muhammad_Zakaria", "auto": true, "queries": ["আবু বকর মুহাম্মাদ যাকারিয়া", "Dr Abubakar Muhammad Zakaria bangla"], "must_match": ["যাকারিয়া", "জাকারিয়া", "যাকারিয়্যা", "zakaria", "zakariya"]},
     {"key": "Sadikur_Rahman_Azhari", "auto": true, "queries": ["মুফতি সাদিকুর রহমান আজহারী", "Sadikur Rahman Azhari waz"], "must_match": ["সাদিকুর রহমান", "সাদিকুর রাহমান", "sadikur rahman", "sadiqur rahman"]},
     {"key": "Tariq_Jameel", "auto": true, "min_duration_sec": 300, "require_bangla_title": true, "playlist_ids": ["PLTuxjD1pItJVU44Jpy9sS3117gsL9l_0Q"], "queries": ["মাওলানা তারিক জামিল বাংলা বয়ান"], "must_match": ["তারিক জামিল", "তারেক জামিল", "তারিক জামীল", "tariq jameel", "tariq jamil"]},
+    {"key": "Mokhtar_Ahmad", "auto": true, "queries": ["প্রফেসর মোখতার আহমাদ", "Professor Mokhtar Ahmad lecture"], "must_match": ["মোখতার আহমাদ", "মোখতার আহমেদ", "মোখতার আহমদ", "মুখতার আহমাদ", "মুখতার আহমেদ", "mokhtar ahmad", "mokhtar ahmed", "mukhtar ahmad", "mukhtar ahmed", "mokhter ahmad"]},
     {"key": "Quran_EDucation", "auto": false},
     {"key": "Quran_Recitation", "auto": false},
     {"key": "Dua_and_Zikir", "auto": false},
