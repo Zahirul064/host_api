@@ -462,6 +462,32 @@ class PlaylistSpeakerTests(Base):
         self.assertEqual(conf["scholars"][-1]["key"], "Tariq_Jameel")
 
 
+class GojolFilterTests(Base):
+    """গজল: শুধু অনুমোদিত (মিউজিক ছাড়া) চ্যানেল বা 'vocal only' চিহ্ন; মাজার-কেন্দ্রিক বাদ।"""
+    def setUp(self):
+        super().setUp()
+        conf = json.loads(json.dumps(CONFIG))
+        conf["scholars"] = [x for x in conf["scholars"] if x["key"] != "Bangla_Gojol"]
+        conf["scholars"].append({"key": "Bangla_Gojol", "auto": True, "queries": ["গজল"],
+                                 "must_match": ["গজল"], "min_duration_sec": 60,
+                                 "allowed_channel_ids": ["UCholytuneholytuneholytu"],
+                                 "allowed_title_markers": ["vocal only", "মিউজিক ছাড়া"],
+                                 "blocked_title_substrings": ["মাজার", "ওরস", "কাওয়ালী"]})
+        conf["defaults"]["max_new_per_category"] = 10
+        self.conf.write_text(json.dumps(conf, ensure_ascii=False), encoding="utf-8")
+
+    def test_allow_list_and_mazar_block(self):
+        f = FakeYouTube({"গজল": ["G1aaaaaaaaa", "G2aaaaaaaaa", "G3aaaaaaaaa", "G4aaaaaaaaa", "G5aaaaaaaaa"]}, [
+            video("G1aaaaaaaaa", "কলরবের নতুন গজল", ch="UCholytuneholytuneholytu"),           # অনুমোদিত চ্যানেল
+            video("G2aaaaaaaaa", "নতুন গজল | মিউজিকসহ", ch="UCmusicmusicmusicmusicmu"),         # অন্য চ্যানেল → বাদ
+            video("G3aaaaaaaaa", "সুন্দর গজল | Vocal Only", ch="UCmusicmusicmusicmusicmu2"),    # চিহ্ন আছে → নেবে
+            video("G4aaaaaaaaa", "মাজারের গজল", ch="UCholytuneholytuneholytu"),                 # মাজার → বাদ
+            video("G5aaaaaaaaa", "ওরস শরীফের গজল | vocal only", ch="UCmusicmusicmusicmusicmu3")])
+        self.run_main(f, "--only", "Bangla_Gojol")
+        got = sorted(i["video_id"] for i in self.items() if i["itemType"] == "Bangla_Gojol")
+        self.assertEqual(got, ["G1aaaaaaaaa", "G3aaaaaaaaa"])
+
+
 class ApiLayerTests(unittest.TestCase):
     def setUp(self):
         self.sleeps = []

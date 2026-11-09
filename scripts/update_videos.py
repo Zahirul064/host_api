@@ -371,6 +371,17 @@ def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_c
     if title_blocked(title, blocked_words, blocked_subs, blocked_cs):
         rep.skip("blocked word")
         return None
+    # বিভাগভিত্তিক বাদ-শব্দ (যেমন গজলে মাজার/ওরস/কাওয়ালী) — শব্দের অংশ হলেও বাদ
+    if sch.get("blocked_title_substrings") and title_blocked(title, [], sch["blocked_title_substrings"]):
+        rep.skip("blocked word (category)")
+        return None
+    # শুধু অনুমোদিত চ্যানেল (যেমন মিউজিক ছাড়া গজলের চ্যানেল), অথবা শিরোনামে
+    # "vocal only"/"মিউজিক ছাড়া" জাতীয় চিহ্ন থাকলে
+    allowed = sch.get("allowed_channel_ids")
+    if allowed and sn.get("channelId") not in allowed \
+            and not title_matches(title, sch.get("allowed_title_markers", []) or ["\0never"]):
+        rep.skip("channel not in allow list")
+        return None
     if not trusted and not title_matches(title, sch.get("must_match", [])):
         rep.skip("speaker name not in title")
         return None
