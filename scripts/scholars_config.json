@@ -12,7 +12,8 @@
     "quota_budget": 8000,
     "max_per_channel_per_run": 2,
     "fresh_days": 14,
-    "fresh_slots": 2
+    "fresh_slots": 2,
+    "min_views": 100
   },
   "blocked_title_words": [
     "#shorts",
@@ -27,7 +28,7 @@
     "ফানি",
     "কৌতুক"
   ],
-  "blocked_title_substrings": ["নির্বাচন", "নির্বাচনী", "লংমার্চ", "লং মার্চ", "জোট", "election", "long march", "🔴", "লাইভ", "প্রতিবাদী", "justice for", "বিয়েতে", "বিয়ের", "গায়ে হলুদ", "এমপি"],
+  "blocked_title_substrings": ["নির্বাচন", "নির্বাচনী", "লংমার্চ", "লং মার্চ", "জোট", "election", "long march", "🔴", "লাইভ", "প্রতিবাদী", "justice for", "বিয়েতে", "বিয়ের", "গায়ে হলুদ", "এমপি", "হাসিনা", "আওয়ামী", "আ.লীগ", "আ. লীগ", "লীগের", "বিএনপি", "জামায়াত", "জামায়ত", "জামাতের", "রাজনৈতিক", "রাজনীতি", "গোপালগঞ্জ", "আন্দোলন", "গ্রেফতার", "গ্রেপ্তার", "গ্রে/ফতার", "কেলেঙ্কারি", "কেলেঙ্কারী", "কেলেষ্কারী", "দুর্নীতি", "ভারতপ্রীতি", "পলায়ন", "সরকার পতন", "উপদেষ্টা"],
   "blocked_title_words_case_sensitive": [
     "LIVE"
   ],
@@ -51,8 +52,8 @@
     {"key": "Kazi_Ibrahim", "auto": true, "queries": ["মুফতি কাজী ইব্রাহীম", "Mufti Kazi Ibrahim"], "must_match": ["কাজী ইব্রাহীম", "কাজী ইব্রাহিম", "kazi ibrahim"]},
     {"key": "Mamunul_Haque", "auto": true, "queries": ["মামুনুল হক ওয়াজ"], "must_match": ["মামুনুল হক", "mamunul haque", "mamunul hoque", "mamunul haq"]},
     {"key": "Abubakar_Muhammad_Zakaria", "auto": true, "queries": ["আবু বকর মুহাম্মাদ যাকারিয়া", "Dr Abubakar Muhammad Zakaria bangla"], "must_match": ["যাকারিয়া", "জাকারিয়া", "যাকারিয়্যা", "zakaria", "zakariya"]},
-    {"key": "Sadikur_Rahman_Azhari", "auto": true, "queries": ["মুফতি সাদিকুর রহমান আজহারী", "Sadikur Rahman Azhari waz"], "must_match": ["সাদিকুর রহমান", "সাদিকুর রাহমান", "sadikur rahman", "sadiqur rahman"]},
-    {"key": "Tariq_Jameel", "auto": true, "min_duration_sec": 300, "require_bangla_title": true, "playlist_ids": ["PLTuxjD1pItJVU44Jpy9sS3117gsL9l_0Q"], "queries": ["মাওলানা তারিক জামিল বাংলা বয়ান"], "must_match": ["তারিক জামিল", "তারেক জামিল", "তারিক জামীল", "tariq jameel", "tariq jamil"]},
+    {"key": "Sadikur_Rahman_Azhari", "auto": true, "queries": ["মুফতি সাদিকুর রহমান আজহারী", "Sadikur Rahman Azhari waz"], "must_match": ["সাদিকুর রহমান", "সাদিকুর রাহমান", "sadikur rahman", "sadiqur rahman"], "blocked_title_substrings": ["মিজানুর রহমান আজহারী", "হামাসী"]},
+    {"key": "Tariq_Jameel", "auto": true, "min_duration_sec": 300, "require_bangla_title": true, "playlist_ids": ["PLTuxjD1pItJVU44Jpy9sS3117gsL9l_0Q"], "queries": ["মাওলানা তারিক জামিল বাংলা বয়ান"], "must_match": ["তারিক জামিল", "তারেক জামিল", "তারিক জামীল", "tariq jameel", "tariq jamil"], "blocked_title_substrings": ["কাসেমী", "বাংলার তারিক জামিল"]},
     {"key": "Mokhtar_Ahmad", "auto": true, "queries": ["প্রফেসর মোখতার আহমাদ", "Professor Mokhtar Ahmad lecture"], "must_match": ["মোখতার আহমাদ", "মোখতার আহমেদ", "মোখতার আহমদ", "মুখতার আহমাদ", "মুখতার আহমেদ", "mokhtar ahmad", "mokhtar ahmed", "mukhtar ahmad", "mukhtar ahmed", "mokhter ahmad"]},
     {"key": "Quran_EDucation", "auto": false},
     {"key": "Quran_Recitation", "auto": false},

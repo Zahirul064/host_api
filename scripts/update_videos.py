@@ -418,6 +418,11 @@ def build_record(k: str, v: dict, sch: dict, cfg: dict, blocked_words, blocked_c
     if max_d and iso_duration_seconds(cd.get("duration", "")) > max_d:
         rep.skip("too long")
         return None
+    # খুব কম দেখা (ছোট রি-আপলোড চ্যানেল) বাদ; min_views না থাকলে সীমা নেই
+    min_v = int(sch.get("min_views", cfg.get("min_views", 0)) or 0)
+    if min_v and not trusted and _view_count(v) < min_v:
+        rep.skip("too few views")
+        return None
     pub = sn.get("publishedAt", "")
     if not valid_iso_date(pub):
         rep.skip("bad publish date")
