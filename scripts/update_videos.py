@@ -319,6 +319,26 @@ def discover(sch: dict, cfg: dict, key: str, quota: QuotaGuard, since: str, rep:
             raise
         except ApiError as e:
             rep.failed.append((sch["key"], f"playlist {pl}: {e}"))
+    # নতুন আপলোড (fresh_days দিনের মধ্যে) — প্রথম সার্চ শব্দ দিয়ে, নতুনতম আগে।
+    # viewCount-এ সাজালে নতুন ভিডিও পুরনো জনপ্রিয়গুলোর নিচে চাপা পড়ে, তাই আলাদা খোঁজ।
+    fresh_days = int(cfg.get("fresh_days", 0) or 0)
+    if fresh_days and int(cfg.get("fresh_slots", 0) or 0) and sch.get("queries"):
+        fsince = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=fresh_days)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        try:
+            data = api_get("search", {
+                "part": "id", "type": "video", "q": sch["queries"][0], "order": "date",
+                "publishedAfter": fsince, "maxResults": cfg["search_max_results"],
+                "regionCode": cfg["region_code"], "relevanceLanguage": cfg["relevance_language"],
+                "videoEmbeddable": "true", "safeSearch": "strict",
+            }, key, quota)
+            for it in data.get("items") or []:
+                vid = ((it or {}).get("id") or {}).get("videoId")
+                if isinstance(vid, str):
+                    ids.append(vid)
+        except (InvalidKeyError, QuotaError):
+            raise
+        except ApiError as e:
+            rep.failed.append((sch["key"], f"fresh search: {e}"))
     for q in sch.get("queries", []):
         try:
             data = api_get("search", {
@@ -558,6 +578,14 @@ def run(args) -> int:
             recs.sort(key=lambda r: (r[1].get("view_count", 0), r[1]["published_at"]), reverse=True)
         else:
             recs.sort(key=lambda r: r[1]["published_at"], reverse=True)
+        # প্রতিদিনের কোটার প্রথম fresh_slots টি জায়গা নতুন আপলোডের জন্য সংরক্ষিত
+        # (তাদের মধ্যে বেশি দেখা আগে); বাকিগুলো আগের মতো সবচেয়ে বেশি দেখা
+        fslots = int(cfg.get("fresh_slots", 0) or 0)
+        if fslots and cfg.get("fresh_days"):
+            fsince = (dt.datetime.now(dt.timezone.utc)
+                      - dt.timedelta(days=int(cfg["fresh_days"]))).strftime("%Y-%m-%dT%H:%M:%SZ")
+            fresh = [r for r in recs if r[1]["published_at"] >= fsince][:fslots]
+            recs = fresh + [r for r in recs if r not in fresh]
         chosen = []
         for r, m in recs:
             tk = title_key(r["title"])

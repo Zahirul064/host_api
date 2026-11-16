@@ -10,7 +10,9 @@
     "region_code": "BD",
     "relevance_language": "bn",
     "quota_budget": 8000,
-    "max_per_channel_per_run": 2
+    "max_per_channel_per_run": 2,
+    "fresh_days": 14,
+    "fresh_slots": 2
   },
   "blocked_title_words": [
     "#shorts",

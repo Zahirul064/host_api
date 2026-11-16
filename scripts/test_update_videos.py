@@ -462,6 +462,26 @@ class PlaylistSpeakerTests(Base):
         self.assertEqual(conf["scholars"][-1]["key"], "Tariq_Jameel")
 
 
+class FreshSlotTests(Base):
+    """নতুন আপলোড কম ভিউ হলেও প্রতিদিনের কোটায় সংরক্ষিত জায়গা পায়।"""
+    def test_fresh_upload_gets_reserved_slot(self):
+        import datetime as _dt
+        now = _dt.datetime.now(_dt.timezone.utc)
+        ago = lambda d: (now - _dt.timedelta(days=d)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        conf = json.loads(json.dumps(CONFIG))
+        conf["defaults"].update({"max_new_per_category": 2, "fresh_days": 14, "fresh_slots": 1,
+                                 "sort_by": "viewCount", "lookback_days": 180})
+        self.conf.write_text(json.dumps(conf, ensure_ascii=False), encoding="utf-8")
+        f = FakeYouTube({"তারেক মনোয়ার": ["FRold000001", "FRold000002", "FRnew000001"]}, [
+            video("FRold000001", "তারেক মনোয়ার ওয়াজ ১", pub=ago(100), views=1000),
+            video("FRold000002", "তারেক মনোয়ার ওয়াজ ২", pub=ago(90), views=900),
+            video("FRnew000001", "তারেক মনোয়ার নতুন ওয়াজ", pub=ago(2), views=10)])
+        self.run_main(f, "--only", "Tarik_Monwar")
+        got = {i["video_id"] for i in self.items() if i["video_id"].startswith("FR")}
+        self.assertEqual(got, {"FRnew000001", "FRold000001"})
+        self.assertEqual(sum(1 for c in f.calls if c[0] == "search"), 2)   # সাধারণ + নতুন আপলোড
+
+
 class GojolFilterTests(Base):
     """গজল: শুধু অনুমোদিত (মিউজিক ছাড়া) চ্যানেল বা 'vocal only' চিহ্ন; মাজার-কেন্দ্রিক বাদ।"""
     def setUp(self):
