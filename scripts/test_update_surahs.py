@@ -226,3 +226,46 @@ class ChannelModeTests(unittest.TestCase):
         self.assertNotIn("OLDfatiha01", meta)
         self.assertEqual(meta["NFfatiha002"]["surah"], 1)
         self.assertEqual(json.loads(self.prog.read_text())["112"]["video_id"], "NFikhlas001")
+
+
+class ReplaceModeTests(unittest.TestCase):
+    """--replace: খারাপ সূরা-ভিডিও একই জায়গায় ভালো তিলাওয়াতে বদল; শেখানো/সংকলন বাদ।"""
+
+    def test_replace_in_place_with_recitation(self):
+        tmp = Path(tempfile.mkdtemp())
+        data, meta, prog = tmp / "d.json", tmp / "m.json", tmp / "p.json"
+        items = [{"itemType": "Quran_Recitation", "title": "সূরা ফাতিহা (১) | Cara Membaca", "video_id": "BADfatiha01"},
+                 {"itemType": "Quran_Recitation", "title": "সূরা ইখলাস", "video_id": "GOODikhlas1"}]
+        data.write_text(json.dumps({"itemType": items}, ensure_ascii=False), encoding="utf-8")
+        meta.write_text(json.dumps({"BADfatiha01": {"surah": 1, "source": "auto-surah", "itemType": "Quran_Recitation"},
+                                    "GOODikhlas1": {"surah": 112, "source": "auto-surah", "itemType": "Quran_Recitation"}}),
+                        encoding="utf-8")
+        prog.write_text(json.dumps({"1": {"status": "done", "video_id": "BADfatiha01"},
+                                    "112": {"status": "done", "video_id": "GOODikhlas1"}}), encoding="utf-8")
+        vids = [video("RPteach0001", "Cara Membaca Surah Al-Fatihah", 99999),
+                video("RPplain0001", "Surah Al-Fatihah", 50000),                       # তিলাওয়াত শব্দ নেই
+                video("RPrecite001", "Surah Al-Fatihah beautiful recitation", 1000)]
+        byid = {v["id"]: v for v in vids}
+
+        def fake(endpoint, params, key, quota, **kw):
+            quota.spend(endpoint)
+            if endpoint == "search":
+                return {"items": [{"id": {"videoId": v["id"]}} for v in vids]}
+            if endpoint == "videos":
+                return {"items": [byid[i] for i in params["id"].split(",") if i in byid]}
+            return {"items": []}
+        os.environ["YT_API_KEY"] = "k"
+        orig, uv.api_get = uv.api_get, fake
+        try:
+            out = io.StringIO()
+            with mock.patch("sys.stdout", out):
+                code = us.main(["--replace", "1", "--data", str(data), "--meta", str(meta),
+                                "--progress", str(prog), "--summary-file", ""])
+        finally:
+            uv.api_get = orig
+        self.assertEqual(code, 0, out.getvalue())
+        ids = [i["video_id"] for i in json.loads(data.read_text(encoding="utf-8"))["itemType"]]
+        self.assertEqual(ids, ["RPrecite001", "GOODikhlas1"])
+        m = json.loads(meta.read_text(encoding="utf-8"))
+        self.assertNotIn("BADfatiha01", m)
+        self.assertEqual(json.loads(prog.read_text())["1"]["video_id"], "RPrecite001")

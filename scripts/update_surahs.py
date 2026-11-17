@@ -46,6 +46,12 @@ BLOCKED_SUBSTR = ["তাফসীর", "তাফসির", "ওয়াজ",
                   "আয়াতুল কুরসী", "আয়াতুল কুরসি", "আয়াতুল কুরসী", "৩ কুল", "তিন কুল", "চার কুল", "৪ কুল",
                   "শেষ দুই আয়াত", "ayatul kursi", "3 qul", "4 qul"]
 BLOCKED_CS = ["LIVE"]
+# পড়া শেখানো/তাজবীদ ক্লাস (তিলাওয়াত নয়)
+BLOCKED_WORDS += ["cara", "belajar", "tajweed", "tajwid", "learn", "lesson", "class"]
+BLOCKED_SUBSTR += ["how to read", "শিখুন", "শেখা", "শিক্ষা", "তাজবীদ", "তাজভীদ", "ক্লাস"]
+# --replace: শিরোনামে অবশ্যই তিলাওয়াত বোঝায় এমন শব্দ
+RECITE_WORDS = ["recitation", "recite", "recited", "tilawat", "tilawah", "telawat", "qirat", "qiraat",
+                "তিলাওয়াত", "তেলাওয়াত", "তিলাওয়াত", "তেলাওয়াত", "কিরাত", "تلاوة", "تلاوه"]
 
 
 # ── matching ─────────────────────────────────────────────────────────────
@@ -127,8 +133,20 @@ def run(args) -> int:
     now = dt.datetime.now(dt.timezone.utc)
     since = (now - dt.timedelta(days=args.lookback_days)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    # --replace: এই সূরাগুলোর বর্তমান অটো-ভিডিও বদলাবে (একই জায়গায়), কড়া তিলাওয়াত-ফিল্টারে
+    old_pos: dict[int, int] = {}
+    for n_ in (args.replace or []):
+        for i, it in enumerate(items):
+            m_ = meta.get(it["video_id"]) or {}
+            if it["itemType"] == CATEGORY and m_.get("source") == "auto-surah" and m_.get("surah") == n_:
+                old_pos[n_] = i
+                break
+        progress[str(n_)] = {"status": "pending", "tries": 1}      # সব সময়ের মধ্যে খোঁজ
+    strict = bool(args.replace)
     todo = [s for s in surahs
             if progress.get(str(s["n"]), {}).get("status") not in ("done", "not_found")]
+    if args.replace:
+        todo = [s for s in todo if s["n"] in args.replace]
     if args.only:
         todo = [s for s in todo if s["n"] in args.only]
     added: list[tuple[dict, dict, dict]] = []   # (surah, record, meta)
@@ -175,6 +193,8 @@ def run(args) -> int:
                 continue
             if uv.title_key(title) in seen_titles:
                 continue
+            if strict and not uv.title_matches(title, RECITE_WORDS):
+                continue
             vc = uv._view_count(v)
             if best is None or vc > best[1]:
                 best = (v, vc, title)
@@ -200,6 +220,12 @@ def run(args) -> int:
         progress[n] = st
         added.append((s, rec, m))
         report["added"].append({"surah": s["n"], "video_id": v["id"], "views": vc, "title": title})
+
+    # --replace-এ ভালো কিছু না পেলে আগেরটাই থাকে
+    got = {s_["n"] for s_, _, _ in added}
+    for n_, i in old_pos.items():
+        if n_ not in got:
+            progress[str(n_)] = {"status": "done", "video_id": items[i]["video_id"], "tries": 1}
 
     # ── সারাংশ ──
     done = sum(1 for p in progress.values() if p.get("status") == "done")
@@ -234,7 +260,15 @@ def run(args) -> int:
         return 0
 
     # ── মার্জ: আগের সূরা-রেকর্ডগুলোর ঠিক পরে (না থাকলে ক্যাটাগরির শুরুতে), ১→১১৪ ক্রমে ──
-    new_recs = [rec for _, rec, _ in sorted(added, key=lambda x: x[0]["n"])]
+    # --replace: পুরনো রেকর্ডের জায়গাতেই নতুনটা
+    swapped = {}
+    for s_, rec, _ in added:
+        if s_["n"] in old_pos:
+            old_id = items[old_pos[s_["n"]]]["video_id"]
+            swapped[old_id] = rec["video_id"]
+            items[old_pos[s_["n"]]] = rec
+            meta.pop(old_id, None)
+    new_recs = [rec for s_, rec, _ in sorted(added, key=lambda x: x[0]["n"]) if s_["n"] not in old_pos]
     if new_recs:
         prev_ids = {p["video_id"] for p in progress.values() if p.get("status") == "done"} - {r["video_id"] for r in new_recs}
         last_prev = max((i for i, it in enumerate(items) if it["video_id"] in prev_ids), default=None)
@@ -246,7 +280,7 @@ def run(args) -> int:
     else:
         merged = items
     out_doc = {k: (merged if k == "itemType" else doc[k]) for k in original_keys}
-    old_ids = [it["video_id"] for it in items]
+    old_ids = [it["video_id"] for it in items]   # (বদলানোগুলো ইতিমধ্যে নতুন আইডিতে)
 
     def validate(d):
         e = uv.validate_document(d, strict_ids=False)
@@ -432,6 +466,7 @@ def main(argv=None) -> int:
     p.add_argument("--lookback-days", type=int, default=180)
     p.add_argument("--min-duration", type=int, default=60)
     p.add_argument("--only", type=int, nargs="*", help="শুধু এই সূরা নম্বরগুলো")
+    p.add_argument("--replace", type=int, nargs="*", help="এই সূরাগুলোর বর্তমান ভিডিও ভালো তিলাওয়াতে বদলাও")
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--summary-file", default=os.environ.get("GITHUB_STEP_SUMMARY", ""))
     p.add_argument("--report-json", default="")
