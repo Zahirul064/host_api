@@ -166,6 +166,18 @@
     "itemType": "Amir_Hamza",
     "added_at": "2026-11-03T06:58:07Z"
   },
+  "0RiDKEP1AeI": {
+    "itemType": "Quran_Recitation",
+    "surah": 1,
+    "published_at": "2026-09-05T16:37:07Z",
+    "channel": "Al-Qur'an Medis",
+    "channel_id": "UC2NUvf7WU4lTN-OXgopeNAQ",
+    "url": "https://www.youtube.com/watch?v=0RiDKEP1AeI",
+    "view_count": 3730468,
+    "source": "auto-surah",
+    "window": "180d",
+    "added_at": "2026-10-30T09:51:35Z"
+  },
   "0foT9EUZPWM": {
     "published_at": "2026-08-13T10:00:18Z",
     "channel": "Alhamdulillah Ami Muslim",
@@ -4809,18 +4821,6 @@
     "view_count": 1402321,
     "itemType": "Mizanur_Rahman_Azhari",
     "added_at": "2026-11-01T06:21:54Z"
-  },
-  "h-4IYQpg7kE": {
-    "itemType": "Quran_Recitation",
-    "surah": 1,
-    "published_at": "2025-09-03T11:01:17Z",
-    "channel": "An Nafee",
-    "channel_id": "UCeoXPyf7C5FVlMYAn6y1wOQ",
-    "url": "https://www.youtube.com/watch?v=h-4IYQpg7kE",
-    "view_count": 124139,
-    "source": "auto-surah",
-    "window": "channel:@annafee_official",
-    "added_at": "2026-11-17T02:08:41Z"
   },
   "h8sxfzwM3Bg": {
     "itemType": "Quran_Recitation",
