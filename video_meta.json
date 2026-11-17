@@ -166,18 +166,6 @@
     "itemType": "Amir_Hamza",
     "added_at": "2026-11-03T06:58:07Z"
   },
-  "0RiDKEP1AeI": {
-    "itemType": "Quran_Recitation",
-    "surah": 1,
-    "published_at": "2026-09-05T16:37:07Z",
-    "channel": "Al-Qur'an Medis",
-    "channel_id": "UC2NUvf7WU4lTN-OXgopeNAQ",
-    "url": "https://www.youtube.com/watch?v=0RiDKEP1AeI",
-    "view_count": 3730468,
-    "source": "auto-surah",
-    "window": "180d",
-    "added_at": "2026-10-30T09:51:35Z"
-  },
   "0foT9EUZPWM": {
     "published_at": "2026-08-13T10:00:18Z",
     "channel": "Alhamdulillah Ami Muslim",
@@ -3867,6 +3855,18 @@
     "view_count": 85790,
     "itemType": "Mamunul_Haque",
     "added_at": "2026-11-04T06:40:00Z"
+  },
+  "ZYaZ6Odbx_Y": {
+    "itemType": "Quran_Recitation",
+    "surah": 1,
+    "published_at": "2015-07-28T20:49:16Z",
+    "channel": "AYAT",
+    "channel_id": "UCmr7s-S9m-0BKrOr7red8rA",
+    "url": "https://www.youtube.com/watch?v=ZYaZ6Odbx_Y",
+    "view_count": 23877838,
+    "source": "auto-surah",
+    "window": "all-time",
+    "added_at": "2026-11-17T02:15:08Z"
   },
   "ZaOmQjhLVes": {
     "published_at": "2026-07-29T09:33:15Z",
