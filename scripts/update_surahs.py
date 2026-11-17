@@ -160,7 +160,7 @@ def run(args) -> int:
             report["stopped"] = "quota budget for this run used — continues next run"
             break
         params = {"part": "id", "type": "video", "order": "viewCount",
-                  "q": f"Surah {s['en']} beautiful recitation",
+                  "q": args.query.format(en=s["en"]),
                   "maxResults": 25, "videoEmbeddable": "true", "safeSearch": "strict"}
         if not all_time:
             params["publishedAfter"] = since
@@ -466,6 +466,7 @@ def main(argv=None) -> int:
     p.add_argument("--lookback-days", type=int, default=180)
     p.add_argument("--min-duration", type=int, default=60)
     p.add_argument("--only", type=int, nargs="*", help="শুধু এই সূরা নম্বরগুলো")
+    p.add_argument("--query", default="Surah {en} beautiful recitation", help="সার্চ শব্দ ({en} = সূরার ইংরেজি নাম)")
     p.add_argument("--replace", type=int, nargs="*", help="এই সূরাগুলোর বর্তমান ভিডিও ভালো তিলাওয়াতে বদলাও")
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--summary-file", default=os.environ.get("GITHUB_STEP_SUMMARY", ""))

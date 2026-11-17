@@ -16,6 +16,10 @@ on:
         description: "এই সূরা নম্বরগুলোর ভিডিও ভালো তিলাওয়াতে বদলাও (স্পেস দিয়ে, যেমন: 1 5 8)"
         required: false
         default: ""
+      query:
+        description: "সার্চ শব্দ ({en} = সূরার ইংরেজি নাম) — খালি = ডিফল্ট"
+        required: false
+        default: ""
       channel:
         description: "এই চ্যানেলের তিলাওয়াত দিয়ে সূরা বদলাবে (খালি = বন্ধ)"
         required: false
@@ -54,6 +58,7 @@ jobs:
           BUDGET: ${{ github.event.inputs.budget || '6000' }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           REPLACE: ${{ github.event.inputs.replace || '' }}
+          QUERY: ${{ github.event.inputs.query || '' }}
           # নির্ধারিত রানে An Nafee চ্যানেল; হাতে চালালে input থেকে
           CHANNEL: ${{ github.event_name == 'schedule' && '@annafee_official' || github.event.inputs.channel }}
         run: |
@@ -64,6 +69,7 @@ jobs:
           fi
           ARGS=(--budget "$BUDGET" --report-json surah_report.json)
           [ "$DRY_RUN" = "true" ] && ARGS+=(--dry-run)
+          [ -n "$QUERY" ] && ARGS+=(--query "$QUERY")
           if [ -n "$REPLACE" ]; then
             read -r -a NUMS <<< "$(echo "$REPLACE" | tr -cd '0-9 ')"
             ARGS+=(--replace "${NUMS[@]}")
