@@ -175,3 +175,54 @@ class SurahTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ChannelModeTests(unittest.TestCase):
+    """--channel: চ্যানেলের আপলোড থেকে সূরা বদল (একই জায়গায়) ও নতুন যোগ।"""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        self.data, self.meta, self.prog = self.tmp / "d.json", self.tmp / "m.json", self.tmp / "p.json"
+        items = [{"itemType": "Other", "title": "x", "video_id": "OTHERvid001"},
+                 {"itemType": "Quran_Recitation", "title": "সূরা ফাতিহা পুরনো", "video_id": "OLDfatiha01"},
+                 {"itemType": "Quran_Recitation", "title": "হাতে বাছা", "video_id": "MANUALvid01"}]
+        self.data.write_text(json.dumps({"itemType": items}, ensure_ascii=False), encoding="utf-8")
+        self.meta.write_text(json.dumps({"OLDfatiha01": {"itemType": "Quran_Recitation", "surah": 1,
+                                                         "source": "auto-surah"}}), encoding="utf-8")
+        self.prog.write_text(json.dumps({"1": {"status": "done", "video_id": "OLDfatiha01"}}), encoding="utf-8")
+        os.environ["YT_API_KEY"] = "k"
+        self.orig = uv.api_get
+
+    def tearDown(self):
+        uv.api_get = self.orig
+
+    def test_replaces_in_place_and_adds(self):
+        vids = [video("NFfatiha001", "Surah Al-Fatihah | An Nafee", 500),
+                video("NFfatiha002", "সূরা আল ফাতিহা সুন্দর তিলাওয়াত", 900),
+                video("NFikhlas001", "Surah Al-Ikhlas recitation", 300),
+                video("NFmulti0001", "Surah Al-Fatihah and Surah Al-Ikhlas", 9999),   # সংকলন → বাদ
+                video("NFtafsir001", "Surah Al-Ikhlas tafsir", 9999)]                  # তাফসীর → বাদ
+        byid = {v["id"]: v for v in vids}
+
+        def fake(endpoint, params, key, quota, **kw):
+            quota.spend(endpoint)
+            if endpoint == "channels":
+                return {"items": [{"id": "UCannafeeannafeeannafee1",
+                                   "contentDetails": {"relatedPlaylists": {"uploads": "UUannafee"}}}]}
+            if endpoint == "playlistItems":
+                return {"items": [{"contentDetails": {"videoId": v["id"]}} for v in vids]}
+            if endpoint == "videos":
+                return {"items": [byid[i] for i in params["id"].split(",") if i in byid]}
+            return {"items": []}
+        uv.api_get = fake
+        out = io.StringIO()
+        with mock.patch("sys.stdout", out):
+            code = us.main(["--channel", "@annafee_official", "--data", str(self.data), "--meta", str(self.meta),
+                            "--progress", str(self.prog), "--summary-file", ""])
+        self.assertEqual(code, 0, out.getvalue())
+        ids = [i["video_id"] for i in json.loads(self.data.read_text(encoding="utf-8"))["itemType"]]
+        self.assertEqual(ids, ["OTHERvid001", "NFikhlas001", "NFfatiha002", "MANUALvid01"])
+        meta = json.loads(self.meta.read_text(encoding="utf-8"))
+        self.assertNotIn("OLDfatiha01", meta)
+        self.assertEqual(meta["NFfatiha002"]["surah"], 1)
+        self.assertEqual(json.loads(self.prog.read_text())["112"]["video_id"], "NFikhlas001")

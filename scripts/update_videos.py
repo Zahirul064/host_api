@@ -43,7 +43,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ID_RE = re.compile(r"^[A-Za-z0-9_-]{11}$")
 KEY_RE = re.compile(r"^[A-Za-z0-9_]+$")
 REQUIRED_FIELDS = ("itemType", "title", "video_id")
-COST = {"search": 100, "videos": 1, "playlistItems": 1}
+COST = {"search": 100, "videos": 1, "playlistItems": 1, "channels": 1}
 
 
 # ── errors ────────────────────────────────────────────────────────────────

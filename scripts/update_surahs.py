@@ -271,6 +271,154 @@ def run(args) -> int:
     return 0
 
 
+# ── নির্দিষ্ট চ্যানেল থেকে সূরা (যেমন @annafee_official) ───────────────────
+def run_channel(args) -> int:
+    """চ্যানেলের সব আপলোড দেখে প্রতিটি সূরার জন্য ওই চ্যানেলের সবচেয়ে বেশি দেখা
+    তিলাওয়াত বেছে নেয়, আর Quran_Recitation-এ সেই সূরার আগের অটো-ভিডিওটা একই
+    জায়গায় বদলে দেয়। চ্যানেলে যে সূরা নেই, সেটা আগের মতোই থাকে।
+    খরচ খুব কম: চ্যানেল ১ + প্রতি ৫০ আপলোডে ১ + প্রতি ৫০ বিবরণে ১ ইউনিট।"""
+    surahs = json.loads(Path(args.surahs).read_text(encoding="utf-8"))
+    data_path, meta_path, prog_path = Path(args.data), Path(args.meta), Path(args.progress)
+    doc = json.loads(data_path.read_text(encoding="utf-8"))
+    errs = uv.validate_document(doc, strict_ids=False)
+    if errs:
+        print("ERROR: unexpected structure — nothing changed:\n  " + "\n  ".join(errs[:10]), file=sys.stderr)
+        return 4
+    items, original_keys = doc["itemType"], list(doc.keys())
+    meta = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
+    progress = json.loads(prog_path.read_text(encoding="utf-8")) if prog_path.exists() else {}
+    key = os.environ.get("YT_API_KEY", "").strip()
+    if not key:
+        print("ERROR: YT_API_KEY environment variable is not set", file=sys.stderr)
+        return 2
+    quota = uv.QuotaGuard(args.budget)
+    now = dt.datetime.now(dt.timezone.utc)
+    handle = args.channel.lstrip("@")
+    try:
+        if handle.startswith("UC") and len(handle) == 24:
+            ch = uv.api_get("channels", {"part": "contentDetails,snippet", "id": handle}, key, quota)
+        else:
+            ch = uv.api_get("channels", {"part": "contentDetails,snippet", "forHandle": "@" + handle}, key, quota)
+        chi = (ch.get("items") or [None])[0]
+        if not chi:
+            print(f"ERROR: channel {args.channel!r} not found", file=sys.stderr)
+            return 5
+        channel_id = chi["id"]
+        uploads = chi["contentDetails"]["relatedPlaylists"]["uploads"]
+        ids, token = [], ""
+        for _ in range(args.max_pages):
+            params = {"part": "contentDetails", "playlistId": uploads, "maxResults": 50}
+            if token:
+                params["pageToken"] = token
+            data = uv.api_get("playlistItems", params, key, quota)
+            ids += [((it or {}).get("contentDetails") or {}).get("videoId") for it in data.get("items") or []]
+            token = data.get("nextPageToken") or ""
+            if not token:
+                break
+        ids = [i for i in dict.fromkeys(ids) if isinstance(i, str) and uv.ID_RE.match(i)]
+        details = uv.fetch_details(ids, key, quota) if ids else {}
+    except uv.InvalidKeyError as e:
+        print(f"ERROR: {e} — nothing changed", file=sys.stderr)
+        return 3
+    except (uv.QuotaError, uv.ApiError) as e:
+        print(f"ERROR: {e} — nothing changed", file=sys.stderr)
+        return 1
+
+    # প্রতি সূরায় চ্যানেলের সবচেয়ে বেশি দেখা মানানসই ভিডিও
+    best: dict[int, tuple] = {}
+    for vid in ids:
+        v = details.get(vid)
+        if not v or not uv.is_playable(v):
+            continue
+        title = uv.clean_title((v.get("snippet") or {}).get("title", ""))
+        if not title or uv.title_blocked(title, BLOCKED_WORDS, BLOCKED_SUBSTR, BLOCKED_CS):
+            continue
+        if uv.iso_duration_seconds((v.get("contentDetails") or {}).get("duration", "")) < args.min_duration:
+            continue
+        hits = [s for s in surahs if title_matches_surah(title, s)]
+        if len(hits) != 1:          # একাধিক সূরার সংকলন বা কোনোটাই নয় → বাদ
+            continue
+        s = hits[0]
+        vc = uv._view_count(v)
+        if s["n"] not in best or vc > best[s["n"]][1]:
+            best[s["n"]] = (v, vc, title)
+
+    # Quran_Recitation-এ প্রতিটি সূরার বর্তমান অটো-রেকর্ড
+    cur = {}
+    for i, it in enumerate(items):
+        m = meta.get(it["video_id"]) or {}
+        if it["itemType"] == CATEGORY and m.get("source") == "auto-surah" and m.get("surah"):
+            cur.setdefault(int(m["surah"]), i)
+    present = {it["video_id"] for it in items}
+    by_n = {s["n"]: s for s in surahs}
+    new_items, replaced, added, unchanged = list(items), [], [], []
+    for n in sorted(best):
+        v, vc, title = best[n]
+        s = by_n[n]
+        if args.only and n not in args.only:
+            continue
+        rec = {"itemType": CATEGORY, "title": display_title(s, title), "video_id": v["id"]}
+        if v["id"] in present:
+            unchanged.append(n)
+            continue
+        sn = v.get("snippet") or {}
+        m = {"itemType": CATEGORY, "surah": n, "published_at": sn.get("publishedAt", ""),
+             "channel": uv.clean_title(sn.get("channelTitle", ""))[:120], "channel_id": channel_id,
+             "url": f"https://www.youtube.com/watch?v={v['id']}", "view_count": vc, "source": "auto-surah",
+             "window": "channel:" + args.channel, "added_at": now.strftime("%Y-%m-%dT%H:%M:%SZ")}
+        if n in cur:
+            old = new_items[cur[n]]["video_id"]
+            new_items[cur[n]] = rec
+            meta.pop(old, None)
+            replaced.append((n, old, v["id"], vc))
+        else:
+            added.append((n, rec))
+        meta[v["id"]] = m
+        progress[str(n)] = {**progress.get(str(n), {}), "status": "done", "video_id": v["id"]}
+    if added:   # সূরা-রেকর্ড আগে ছিল না → ক্যাটাগরির শুরুতে
+        pos = next((i for i, it in enumerate(new_items) if it["itemType"] == CATEGORY), len(new_items))
+        new_items = new_items[:pos] + [r for _, r in sorted(added)] + new_items[pos:]
+
+    lines = [f"## সূরা তিলাওয়াত — চ্যানেল {args.channel}", "",
+             f"- চ্যানেলের আপলোড দেখা: {len(ids)} | সূরা মিলেছে: {len(best)}/114 | "
+             f"বদলানো: {len(replaced)} | নতুন: {len(added)} | আগে থেকেই: {len(unchanged)} | quota: {quota.used}"]
+    missing = [n for n in range(1, 115) if n not in best]
+    if missing:
+        lines.append(f"- এই চ্যানেলে পাওয়া যায়নি (আগেরটাই থাকল): {missing}")
+    summary = "\n".join(lines) + "\n"
+    print(summary)
+    if args.summary_file:
+        with open(args.summary_file, "a", encoding="utf-8") as f:
+            f.write(summary)
+    if args.report_json:
+        Path(args.report_json).write_text(json.dumps(
+            {"replaced": replaced, "added": [n for n, _ in added], "missing": missing},
+            ensure_ascii=False, indent=2), encoding="utf-8")
+    if args.dry_run or not (replaced or added):
+        print("(কোনো ফাইল লেখা হয়নি)")
+        return 0
+    out_doc = {k: (new_items if k == "itemType" else doc[k]) for k in original_keys}
+
+    def validate(d):
+        e = uv.validate_document(d, strict_ids=False)
+        if list(d) != original_keys:
+            e.append("top-level keys changed")
+        if len(d["itemType"]) != len(items) + len(added):
+            e.append("record count changed unexpectedly")
+        if e:
+            raise uv.ValidationError("; ".join(e[:10]))
+
+    try:
+        uv.atomic_write_json(data_path, out_doc, validate)
+    except uv.ValidationError as e:
+        print(f"ERROR: validation failed — original kept: {e}", file=sys.stderr)
+        return 4
+    uv.atomic_write_json(meta_path, dict(sorted(meta.items())))
+    uv.atomic_write_json(prog_path, dict(sorted(progress.items(), key=lambda kv: int(kv[0]))))
+    print(f"লেখা হয়েছে: {len(replaced)} বদল, {len(added)} নতুন")
+    return 0
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--surahs", default=str(ROOT / "scripts" / "surahs.json"))
@@ -284,7 +432,10 @@ def main(argv=None) -> int:
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--summary-file", default=os.environ.get("GITHUB_STEP_SUMMARY", ""))
     p.add_argument("--report-json", default="")
-    return run(p.parse_args(argv))
+    p.add_argument("--channel", default="", help="এই চ্যানেলের (যেমন @annafee_official) তিলাওয়াত দিয়ে সূরা বদলাও")
+    p.add_argument("--max-pages", type=int, default=20, help="--channel: সর্বোচ্চ কত পাতা আপলোড (৫০টি করে)")
+    a = p.parse_args(argv)
+    return run_channel(a) if a.channel else run(a)
 
 
 if __name__ == "__main__":

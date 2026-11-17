@@ -12,6 +12,10 @@ on:
         description: "এই রানের quota সীমা (প্রতি সূরা ~১০১ ইউনিট)"
         required: false
         default: "6000"
+      channel:
+        description: "এই চ্যানেলের তিলাওয়াত দিয়ে সূরা বদলাবে (খালি = বন্ধ)"
+        required: false
+        default: "@annafee_official"
       dry_run:
         description: "শুধু রিপোর্ট দেখাবে, ফাইল বদলাবে না"
         type: boolean
@@ -45,6 +49,8 @@ jobs:
           YT_API_KEY: ${{ secrets.YT_API_KEY }}
           BUDGET: ${{ github.event.inputs.budget || '6000' }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          # নির্ধারিত রানে An Nafee চ্যানেল; হাতে চালালে input থেকে
+          CHANNEL: ${{ github.event_name == 'schedule' && '@annafee_official' || github.event.inputs.channel }}
         run: |
           if [ -z "$YT_API_KEY" ]; then
             echo "::warning::YT_API_KEY secret নেই — স্কিপ"
@@ -57,6 +63,15 @@ jobs:
           python scripts/update_surahs.py "${ARGS[@]}"
           code=$?
           set -e
+          # প্রিয় চ্যানেলের (An Nafee) তিলাওয়াত দিয়ে সূরা বদল — খুব কম কোটা লাগে
+          if [ "$code" = "0" ] && [ -n "$CHANNEL" ]; then
+            CARGS=(--channel "$CHANNEL" --report-json surah_channel_report.json)
+            [ "$DRY_RUN" = "true" ] && CARGS+=(--dry-run)
+            set +e
+            python scripts/update_surahs.py "${CARGS[@]}"
+            code=$?
+            set -e
+          fi
           echo "code=$code" >> "$GITHUB_OUTPUT"
           [ "$code" = "0" ] || echo "::error::সূরা আপডেট ফেল (exit $code) — আসল JSON অক্ষত"
 
@@ -65,7 +80,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: surah-report
-          path: surah_report.json
+          path: |
+            surah_report.json
+            surah_channel_report.json
           if-no-files-found: ignore
           retention-days: 30
 
