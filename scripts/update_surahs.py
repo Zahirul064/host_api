@@ -51,7 +51,12 @@ BLOCKED_WORDS += ["cara", "belajar", "tajweed", "tajwid", "learn", "lesson", "cl
 BLOCKED_SUBSTR += ["how to read", "শিখুন", "শেখা", "শিক্ষা", "তাজবীদ", "তাজভীদ", "ক্লাস"]
 # --replace: শিরোনামে অবশ্যই তিলাওয়াত বোঝায় এমন শব্দ
 RECITE_WORDS = ["recitation", "recite", "recited", "tilawat", "tilawah", "telawat", "qirat", "qiraat",
-                "তিলাওয়াত", "তেলাওয়াত", "তিলাওয়াত", "তেলাওয়াত", "কিরাত", "تلاوة", "تلاوه"]
+                "তিলাওয়াত", "তেলাওয়াত", "তিলাওয়াত", "তেলাওয়াত", "কিরাত", "تلاوة", "تلاوه",
+                # পরিচিত কারীদের নাম থাকলেও চলবে
+                "mishary", "alafasy", "afasy", "sudais", "shuraim", "ghamdi", "minshawi", "husary",
+                "abdul basit", "abdulbasit", "maher", "muaiqly", "luhaidan", "dosari", "yasser", "qari",
+                "কারী", "ক্বারী", "العفاسي", "السديس", "المنشاوي", "الحصري", "عبد الباسط", "ماهر المعيقلي",
+                "اللحيدان", "الدوسري", "القارئ"]
 
 
 # ── matching ─────────────────────────────────────────────────────────────
