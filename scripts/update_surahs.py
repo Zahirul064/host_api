@@ -103,6 +103,14 @@ def title_matches_surah(title: str, s: dict) -> bool:
             or matches_bn(title, s["bn_match"]))
 
 
+# খুব ছোট সূরা (ফাতিহা, শেষের দিকের ছোট সূরা) — তিলাওয়াত এক মিনিটের কম হতে পারে
+SHORT_SURAHS = {1, 97, 103, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114}
+
+
+def min_dur(s: dict, args) -> int:
+    return min(args.min_duration, 25) if s["n"] in SHORT_SURAHS else args.min_duration
+
+
 def bn_digits(n: int) -> str:
     return str(n).translate(str.maketrans("0123456789", "০১২৩৪৫৬৭৮৯"))
 
@@ -194,7 +202,7 @@ def run(args) -> int:
                 continue
             if uv.title_blocked(title, BLOCKED_WORDS, BLOCKED_SUBSTR, BLOCKED_CS):
                 continue
-            if uv.iso_duration_seconds((v.get("contentDetails") or {}).get("duration", "")) < args.min_duration:
+            if uv.iso_duration_seconds((v.get("contentDetails") or {}).get("duration", "")) < min_dur(s, args):
                 continue
             if uv.title_key(title) in seen_titles:
                 continue
@@ -375,12 +383,12 @@ def run_channel(args) -> int:
         title = uv.clean_title((v.get("snippet") or {}).get("title", ""))
         if not title or uv.title_blocked(title, BLOCKED_WORDS, BLOCKED_SUBSTR, BLOCKED_CS):
             continue
-        if uv.iso_duration_seconds((v.get("contentDetails") or {}).get("duration", "")) < args.min_duration:
-            continue
         hits = [s for s in surahs if title_matches_surah(title, s)]
         if len(hits) != 1:          # একাধিক সূরার সংকলন বা কোনোটাই নয় → বাদ
             continue
         s = hits[0]
+        if uv.iso_duration_seconds((v.get("contentDetails") or {}).get("duration", "")) < min_dur(s, args):
+            continue
         vc = uv._view_count(v)
         if s["n"] not in best or vc > best[s["n"]][1]:
             best[s["n"]] = (v, vc, title)
