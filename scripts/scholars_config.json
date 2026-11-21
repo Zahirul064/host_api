@@ -55,6 +55,7 @@
     {"key": "Sadikur_Rahman_Azhari", "auto": true, "queries": ["মুফতি সাদিকুর রহমান আজহারী", "Sadikur Rahman Azhari waz"], "must_match": ["সাদিকুর রহমান", "সাদিকুর রাহমান", "sadikur rahman", "sadiqur rahman"], "blocked_title_substrings": ["মিজানুর রহমান আজহারী", "হামাসী"]},
     {"key": "Tariq_Jameel", "auto": true, "min_duration_sec": 300, "require_bangla_title": true, "playlist_ids": ["PLTuxjD1pItJVU44Jpy9sS3117gsL9l_0Q"], "queries": ["মাওলানা তারিক জামিল বাংলা বয়ান"], "must_match": ["তারিক জামিল", "তারেক জামিল", "তারিক জামীল", "tariq jameel", "tariq jamil"], "blocked_title_substrings": ["কাসেমী", "বাংলার তারিক জামিল"]},
     {"key": "Mokhtar_Ahmad", "auto": true, "queries": ["প্রফেসর মোখতার আহমাদ", "Professor Mokhtar Ahmad lecture"], "must_match": ["মোখতার আহমাদ", "মোখতার আহমেদ", "মোখতার আহমদ", "মুখতার আহমাদ", "মুখতার আহমেদ", "mokhtar ahmad", "mokhtar ahmed", "mukhtar ahmad", "mukhtar ahmed", "mokhter ahmad"]},
+    {"key": "Abdul_Kuddus", "auto": true, "queries": ["মুফতি আব্দুল কুদ্দুস খুলনা", "Mufti Abdul Kuddus Khulna waz"], "must_match": ["আব্দুল কুদ্দুস", "আবদুল কুদ্দুস", "আব্দুল কুদ্দুছ", "abdul kuddus", "abdul quddus", "abdul kudus", "abdul kuddush"]},
     {"key": "Quran_EDucation", "auto": false},
     {"key": "Quran_Recitation", "auto": false},
     {"key": "Dua_and_Zikir", "auto": false},
