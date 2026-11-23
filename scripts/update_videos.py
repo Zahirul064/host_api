@@ -301,7 +301,7 @@ def discover(sch: dict, cfg: dict, key: str, quota: QuotaGuard, since: str, rep:
             continue
         token = ""
         try:
-            for _ in range(4):
+            for _ in range(int(sch.get("playlist_max_pages", 4))):
                 params = {"part": "contentDetails", "playlistId": pl, "maxResults": 50}
                 if token:
                     params["pageToken"] = token
@@ -586,7 +586,7 @@ def run(args) -> int:
                 rep.skip("no details returned")
                 continue
             built = build_record(k, v, sch, cfg, blocked_words, blocked_ch, rep, blocked_subs, blocked_cs,
-                                 trusted=vid in from_pl)
+                                 trusted=vid in from_pl and sch.get("playlist_trusted", True))
             if built:
                 recs.append(built)
         # sort_by = "viewCount": সবচেয়ে বেশি দেখা আগে; নইলে নতুনতম আগে
@@ -609,7 +609,8 @@ def run(args) -> int:
             if tk in seen_titles:
                 rep.skip("same title already present")
                 continue
-            if per_channel and channel_count.get(ch, 0) >= per_channel:
+            pc = int(sch.get("max_per_channel_per_run", per_channel) or 0)
+            if pc and channel_count.get(ch, 0) >= pc:
                 rep.skip("channel limit per run")
                 continue
             if len(chosen) >= lim:

@@ -442,6 +442,15 @@ class PlaylistSpeakerTests(Base):
         self.assertEqual(sum(1 for c in f.calls if c[0] == "playlistItems"), 2)   # ২ পাতা
         self.assertEqual(self.items()[:len(EXISTING)], EXISTING)                 # পুরনো অক্ষত, নতুন শেষে
 
+    def test_untrusted_playlist_still_needs_name(self):
+        conf = json.loads(self.conf.read_text(encoding="utf-8"))
+        conf["scholars"][-1].update({"playlist_trusted": False, "max_per_channel_per_run": 0, "queries": []})
+        conf["defaults"]["max_per_channel_per_run"] = 1
+        self.conf.write_text(json.dumps(conf, ensure_ascii=False), encoding="utf-8")
+        self.run_main(self.fake(), "--only", "Tariq_Jameel")
+        got = sorted(i["video_id"] for i in self.items() if i["itemType"] == "Tariq_Jameel")
+        self.assertEqual(got, ["PLvideo0001"])     # নাম নেই বা বাংলা নয় → বাদ; চ্যানেল-সীমা প্রযোজ্য নয়
+
     def test_blocked_video_ids_never_return(self):
         conf = json.loads(self.conf.read_text(encoding="utf-8"))
         conf["blocked_video_ids"] = ["PLvideo0001"]
