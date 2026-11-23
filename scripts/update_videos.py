@@ -551,6 +551,17 @@ def run(args) -> int:
         k = sch["key"]
         if not sch.get("auto") or (args.only and k not in args.only):
             continue
+        # বিভাগভিত্তিক সীমা: প্রতি রানে (max_new_per_category) ও গত ৭ দিনে (max_per_week)
+        lim = int(sch.get("max_new_per_category", limit))
+        if sch.get("max_per_week"):
+            week_ago = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ")
+            this_week = sum(1 for m_ in meta.values()
+                            if isinstance(m_, dict) and m_.get("itemType") == k
+                            and (m_.get("added_at") or "") >= week_ago)
+            lim = min(lim, int(sch["max_per_week"]) - this_week)
+            if lim <= 0:
+                rep.skip("weekly limit reached")
+                continue          # কোটাও খরচ হয় না
         attempted += 1
         try:
             from_pl: set = set()
@@ -601,7 +612,7 @@ def run(args) -> int:
             if per_channel and channel_count.get(ch, 0) >= per_channel:
                 rep.skip("channel limit per run")
                 continue
-            if len(chosen) >= limit:
+            if len(chosen) >= lim:
                 rep.skip("over per-run limit")
                 continue
             chosen.append((r, m))

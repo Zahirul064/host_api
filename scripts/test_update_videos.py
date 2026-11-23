@@ -482,6 +482,34 @@ class FreshSlotTests(Base):
         self.assertEqual(sum(1 for c in f.calls if c[0] == "search"), 2)   # সাধারণ + নতুন আপলোড
 
 
+class WeeklyLimitTests(Base):
+    """max_per_week: গত ৭ দিনে যোগ হওয়াসহ সীমা; সীমা পূর্ণ হলে সার্চই হয় না।"""
+    def _conf(self):
+        conf = json.loads(json.dumps(CONFIG))
+        conf["scholars"] = [x for x in conf["scholars"] if x["key"] != "Bangla_Gojol"]
+        conf["scholars"].append({"key": "Bangla_Gojol", "auto": True, "queries": ["দোয়া"], "must_match": ["দোয়া"],
+                                 "min_duration_sec": 60, "max_new_per_category": 3, "max_per_week": 4})
+        self.conf.write_text(json.dumps(conf, ensure_ascii=False), encoding="utf-8")
+
+    def _fake(self):
+        return FakeYouTube({"দোয়া": [f"WKdua{i:06d}" for i in range(6)]},
+                           [video(f"WKdua{i:06d}", f"সুন্দর দোয়া {i}", views=100 - i) for i in range(6)])
+
+    def test_weekly_cap(self):
+        import datetime as _dt
+        self._conf()
+        recent = (_dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.meta.write_text(json.dumps({"OLDvideo001": {"itemType": "Bangla_Gojol", "added_at": recent}}),
+                             encoding="utf-8")
+        self.run_main(self._fake(), "--only", "Bangla_Gojol")
+        got = [i for i in self.items() if i["video_id"].startswith("WKdua")]
+        self.assertEqual(len(got), 3)                       # প্রতি রানে ৩ (সপ্তাহে বাকি ছিল ৩)
+        f = self._fake()
+        self.run_main(f, "--only", "Bangla_Gojol")          # এখন সপ্তাহে ৪ পূর্ণ
+        self.assertEqual(len([i for i in self.items() if i["video_id"].startswith("WKdua")]), 3)
+        self.assertEqual([c for c in f.calls if c[0] == "search"], [])
+
+
 class GojolFilterTests(Base):
     """গজল: শুধু অনুমোদিত (মিউজিক ছাড়া) চ্যানেল বা 'vocal only' চিহ্ন; মাজার-কেন্দ্রিক বাদ।"""
     def setUp(self):
